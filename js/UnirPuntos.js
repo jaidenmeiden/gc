@@ -1,5 +1,5 @@
 //Shader vertices
-var VSHADER_SOURCE = `
+const VSHADER_SOURCE = `
     attribute vec4 position;
     attribute vec4 color;
     
@@ -12,7 +12,7 @@ var VSHADER_SOURCE = `
     }`;
 
 //Shader fragmentos
-var FSHADER_SOURCE = `
+const FSHADER_SOURCE = `
     varying lowp vec4 vColor;
     void main() {
        gl_FragColor = vColor;
