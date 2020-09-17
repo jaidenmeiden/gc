@@ -1,27 +1,33 @@
 //Shader vertices
 var VSHADER_SOURCE = `
     attribute vec4 position;
+    attribute vec4 color;
+    
+    varying lowp vec4 vColor;
+    
     void main() {
        gl_Position = position;
        gl_PointSize = 10.0;
+       vColor = color;
     }`;
 
 //Shader fragmentos
 var FSHADER_SOURCE = `
+    varying lowp vec4 vColor;
     void main() {
-       gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+       gl_FragColor = vColor;
     }`;
 
 function main() {
     // Recuperar el lienzo
-    var canvas = document.getElementById('canvas');
+    let canvas = document.getElementById('canvas');
     if (!canvas) {
         console.log("Fallo en la carga del canvas!");
         return;
     }
 
     // Recuperar el contexto del render
-    var gl = getWebGLContext(canvas);
+    let gl = getWebGLContext(canvas);
     if(!gl) {
         console.log("Fallo la carga del contexto de render!");
         return;
@@ -39,7 +45,7 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // Localiza el atributo en el shader de vertices
-    var coordenadas = gl.getAttribLocation(gl.program, 'position');
+    let coordenadas = gl.getAttribLocation(gl.program, 'position');
 
     // Registrar event
     canvas.onmousedown = function(event){
@@ -50,22 +56,10 @@ function main() {
 var puntos = []; // Almacena los puntos
 function click(event, gl, canvas, coordenadas) {
     // Procesar la coordenada del click
-    var x = event.clientX;
-    var y = event.clientY;
-    var rect = event.target.getBoundingClientRect();
-//Shader vertices
-var VSHADER_SOURCE = `
-    attribute vec4 position;
-    void main() {
-       gl_Position = position;
-       gl_PointSize = 10.0;
-    }`;
+    let x = event.clientX;
+    let y = event.clientY;
+    let rect = event.target.getBoundingClientRect();
 
-//Shader fragmentos
-var FSHADER_SOURCE = `
-    void main() {
-       gl_FragColor = vec4(1.0,0.0,0.0,1.0);
-    }`;
     // Conversión de coordenadas
     console.log("X: " + "((" + (x-rect.left) + ") - " + (canvas.width/2) + ") * " + (2/canvas.width));
     x = ((x-rect.left) - canvas.width/2) * 2/canvas.width;
@@ -73,11 +67,10 @@ var FSHADER_SOURCE = `
     y = (canvas.height/2 - (y-rect.top)) * 2/canvas.height;
 
     // Guaradar el punto
-    var punto = [];
+    let punto = [];
     punto.push(x);
     punto.push(y);
     puntos.push(punto);
-    console.log(puntos);
 
     //Se borra el canvas
     gl.clear(gl.COLOR_BUFFER_BIT);
