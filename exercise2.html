@@ -1,0 +1,33 @@
+<!doctype html>
+<!-- 
+  Ejemplos sobre Three.js : Cubo texturado animado
+   	Cubo con color por vertice y mapa uv sobre textura en cruz;
+   	Util para comprobar si funciona Threejs sobre el navegador.
+  rvivo@upv.es 2015
+-->
+<html lang="es">
+    <head>
+        <meta charset='utf-8'>
+        <title>Plantilla de carga de WebGL</title>
+        <style>
+            body {
+                background-color: #ffffff;
+                margin: 0px;
+                overflow: hidden;
+            }
+            canvas{background-color: #ffffff;}
+        </style>
+    </head>
+    <body onload="main()">
+        <canvas id="canvas" width="400" height="300">
+            El navegador no soporta HTML5
+        </canvas>
+        <!--Bliblitecas-->
+        <script src="lib/webgl-utils.js"></script>
+        <script src="lib/webgl-debug.js"></script>
+        <script src="lib/cuon-utils.js"></script>
+        <script src="lib/cuon-matrix.js"></script>
+
+        <script src="js/ClickarPuntos.js"></script>
+    </body>
+</html>
