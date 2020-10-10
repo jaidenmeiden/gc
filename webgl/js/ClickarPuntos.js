@@ -13,6 +13,8 @@ var FSHADER_SOURCE = `
     }`;
 
 function main() {
+    let maxColor = 255;
+
     // Recuperar el lienzo
     var canvas = document.getElementById('canvas');
     if (!canvas) {
@@ -33,7 +35,7 @@ function main() {
     }
 
     //Fija el color de borrado del canvas
-    gl.clearColor(0.0, 0.0, 0.3, 1.0);
+    gl.clearColor(224/maxColor, 255/maxColor, 51/maxColor, 1.0);
 
     //Se borra el canvas
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -53,24 +55,12 @@ function click(event, gl, canvas, coordenadas) {
     var x = event.clientX;
     var y = event.clientY;
     var rect = event.target.getBoundingClientRect();
-//Shader vertices
-var VSHADER_SOURCE = `
-    attribute vec4 position;
-    void main() {
-       gl_Position = position;
-       gl_PointSize = 10.0;
-    }`;
 
-//Shader fragmentos
-var FSHADER_SOURCE = `
-    void main() {
-       gl_FragColor = vec4(1.0,0.0,0.0,1.0);
-    }`;
     // Conversión de coordenadas
-    console.log("X: " + "((" + (x-rect.left) + ") - " + (canvas.width/2) + ") * " + (2/canvas.width));
     x = ((x-rect.left) - canvas.width/2) * 2/canvas.width;
-    console.log("Y: " + "(" + (canvas.height/2) + " - (" + (y-rect.top) + ")) * " + (2/canvas.height));
+    console.log("X: " + "((" + (x-rect.left) + ") - " + (canvas.width/2) + ") * " + (2/canvas.width) + " = " + x);
     y = (canvas.height/2 - (y-rect.top)) * 2/canvas.height;
+    console.log("Y: " + "(" + (canvas.height/2) + " - (" + (y-rect.top) + ")) * " + (2/canvas.height) + " = " + y);
 
     // Guaradar el punto
     var punto = [];
