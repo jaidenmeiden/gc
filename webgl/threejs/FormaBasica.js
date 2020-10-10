@@ -35,7 +35,7 @@ function init() {
     camera = new THREE.PerspectiveCamera( 50, ar, 0.1, 100 ); // Inicializa camara (Angulo, razón de aspecto, Distancia con efecto, Distancia sin efecto)
     scene.add(camera);//Agregamos la camara a la escena
     camera.position.set(0.5,3,9);// Posición e la camara (Diferente a la posición  defecto)
-    camera.lookAt(new THREE.Vector3(0,2SE,0)); // A donde esta mirando la cámara
+    camera.lookAt(new THREE.Vector3(0,2,0)); // A donde esta mirando la cámara
 }
 
 function loadScene() {
