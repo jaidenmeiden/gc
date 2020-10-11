@@ -2,6 +2,8 @@
  *	Seminario GPC #2. FormaBasica
  *	Dibujar formas basicas con animacion
  *
+ * https://threejsfundamentals.org/threejs/lessons/threejs-custom-geometry.html
+ *
  */
 
 // Variables imprescindibles
@@ -11,7 +13,7 @@ let renderer, scene, camera;
 let suelo, robot, base;
 let brazo, eje, esparrago, rutula;
 let antebrazo, disco, nervios = [];
-let mano, pinzalIz, pinzalDe;
+let mano, dedos = [], pinzas = [];
 let x = [1, 1, -1, -1], z = [-1, 1, 1, -1], material = [], angulo = 0;
 
 // Acciones
@@ -39,9 +41,14 @@ function init() {
     camera = new THREE.PerspectiveCamera( 40, ar, 0.1, 7000); // Inicializa camara (Angulo, razón de aspecto, Distancia con efecto, Distancia sin efecto)
     scene.add(camera);//Agregamos la camara a la escena
     // Posición e la camara (Diferente a la posición  defecto)
-    camera.position.set(0,500,0);
+    //camera.position.set(100,0,0);
+    //camera.position.set(0,100,0);
+    //camera.position.set(0,0,100);
+    //camera.position.set(100,0,100);
+    //camera.position.set(100,100,100);
+    //camera.position.set(0,500,0);
     //camera.position.set(500,0,500);
-    //camera.position.set(500,500,500);
+    camera.position.set(400,400,400);
     camera.lookAt(new THREE.Vector3(0,0,0)); // A donde esta mirando la cámara
 }
 
@@ -49,15 +56,17 @@ function loadScene() {
     // Cargar la escena con objetos
     generateMaterials();
     // Geometrias
-    var geosuelo = new THREE.PlaneGeometry(1000, 1000, 50, 50);
-    var geobase = new THREE.CylinderGeometry(50, 50, 15, 50);
-    var geoeje = new THREE.CylinderGeometry(20, 20, 18, 40);
-    var geoesparrago = new THREE.BoxGeometry(18, 120, 12);
-    var georotula = new THREE.SphereGeometry(20, 32, 32);
-    var geodisco = new THREE.CylinderGeometry(22, 22, 6, 40);
-    var geonervios = new THREE.BoxGeometry(4, 80, 4);
-    var geomano = new THREE.CylinderGeometry(15, 15, 40, 40);
-    var geopalma = new THREE.BoxGeometry(19, 20, 4);
+    const geosuelo = new THREE.PlaneGeometry(1000, 1000, 50, 50);
+    const geobase = new THREE.CylinderGeometry(50, 50, 15, 50);
+    const geoeje = new THREE.CylinderGeometry(20, 20, 18, 40);
+    const geoesparrago = new THREE.BoxGeometry(18, 120, 12);
+    const georotula = new THREE.SphereGeometry(20, 32, 32);
+    const geodisco = new THREE.CylinderGeometry(22, 22, 6, 40);
+    const geonervios = new THREE.BoxGeometry(4, 80, 4);
+    const geomano = new THREE.CylinderGeometry(15, 15, 40, 40);
+    const ancho = 19, alto = 20, fondo = 4, mueve = ancho;
+    const geopalma = new THREE.BoxGeometry(ancho, alto, fondo);
+    const geopinza = buildPinzas(ancho/2, alto/2, fondo/2, mueve);
 
     // Objetos
     suelo = new THREE.Mesh(geosuelo, material[0]);
@@ -107,15 +116,20 @@ function loadScene() {
     mano.rotation.x = Math.PI/2;
 
     //Objeto pinzas
-    pinzalIz = new THREE.Mesh(geopalma, material[8]);
-    pinzalIz.position.x += 20;
-    pinzalIz.position.y += 10;//Con respecto a mano
-    pinzalIz.rotation.x = Math.PI/2;
+    dedos[0] = new THREE.Mesh(geopalma, material[8]);
+    dedos[0].position.x += 20;
+    dedos[0].position.y += 10;//Con respecto a mano
+    dedos[0].rotation.x = Math.PI/2;
 
-    pinzalDe = new THREE.Mesh(geopalma, material[8]);
-    pinzalDe.position.x += 20;
-    pinzalDe.position.y += -10;//Con respecto a mano
-    pinzalDe.rotation.x = Math.PI/2;
+    pinzas[0] = new THREE.Mesh(geopinza, material[1]);
+
+    dedos[1] = new THREE.Mesh(geopalma, material[8]);
+    dedos[1].position.x += 20;
+    dedos[1].position.y += -10;//Con respecto a mano
+    dedos[1].rotation.x = Math.PI/2;
+
+    pinzas[1] = new THREE.Mesh(geopinza, material[1]);
+    pinzas[1].rotation.x = Math.PI;
 
     //El grafo de escena es así:
     robot.add(base);
@@ -127,8 +141,10 @@ function loadScene() {
     for (let i = 0; i < 4; i++) {
         antebrazo.add(nervios[i]);
     }
-    mano.add(pinzalIz);
-    mano.add(pinzalDe);
+    dedos[0].add(pinzas[0]);
+    mano.add(dedos[0]);
+    dedos[1].add(pinzas[1]);
+    mano.add(dedos[1]);
     mano.add( new THREE.AxisHelper(1000) );
     antebrazo.add(mano);
     brazo.add(antebrazo);
@@ -183,11 +199,49 @@ function generateMaterials() {
         wireframe:true
     });
     material[7] = new THREE.MeshBasicMaterial({
-        color: new THREE.Color("rgb(255, 0, 64)"),
+        color: new THREE.Color("rgb(255, 255, 0)"),
         wireframe:true
     });
     material[8] = new THREE.MeshBasicMaterial({
-        color: new THREE.Color("rgb(0, 255, 64)"),
+        color: new THREE.Color("rgb(0, 0, 0)"),
         wireframe:true
     });
+}
+
+function buildPinzas(ancho, alto, fondo, x) {
+    let geometry = new THREE.Geometry();
+    geometry.vertices.push(
+        new THREE.Vector3(-1 * ancho + x, -1 * alto,  1 * fondo),  // 0
+        new THREE.Vector3( 1 * ancho + x, -1 * alto + (alto / 4),  1 * fondo),  // 1
+        new THREE.Vector3(-1 * ancho + x,  1 * alto,  1 * fondo),  // 2
+        new THREE.Vector3( 1 * ancho + x,  1 * alto - (alto / 4),  1 * fondo),  // 3
+        new THREE.Vector3(-1 * ancho + x, -1 * alto, -1 * fondo),  // 4
+        new THREE.Vector3( 1 * ancho + x, -1 * alto + (alto / 4), -1 * fondo / 2),  // 5
+        new THREE.Vector3(-1 * ancho + x,  1 * alto, -1 * fondo),  // 6
+        new THREE.Vector3( 1 * ancho + x,  1 * alto - (alto / 4), -1 * fondo / 2),  // 7
+    );
+    geometry.faces.push(
+        // front
+        new THREE.Face3(0, 3, 2),
+        new THREE.Face3(0, 1, 3),
+        // right
+        new THREE.Face3(1, 7, 3),
+        new THREE.Face3(1, 5, 7),
+        // back
+        new THREE.Face3(5, 6, 7),
+        new THREE.Face3(5, 4, 6),
+        // left
+        new THREE.Face3(4, 2, 6),
+        new THREE.Face3(4, 0, 2),
+        // top
+        new THREE.Face3(2, 7, 6),
+        new THREE.Face3(2, 3, 7),
+        // bottom
+        new THREE.Face3(4, 1, 0),
+        new THREE.Face3(4, 5, 1),
+    );
+
+    geometry.computeFaceNormals();
+
+    return geometry;
 }
