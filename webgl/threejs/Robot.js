@@ -106,8 +106,8 @@ function loadScene() {
     for (let i = 0; i < 4; i++) {
         nervios[i] = new THREE.Mesh(geonervios, material[6]);
         nervios[i].position.y += 40;
-        nervios[i].position.x += x[i] * (22/2 - 2);
-        nervios[i].position.z += z[i] * (22/2 - 2);
+        nervios[i].position.x += x[i] * (22/2.5 - 2);
+        nervios[i].position.z += z[i] * (22/2.5 - 2);
     }
 
     //Objeto mano
@@ -158,7 +158,8 @@ function loadScene() {
 
 function update() {
     // Cambios entre frames
-
+    angulo += Math.PI/400;
+    robot.rotation.y = angulo;
 }
 
 function render() {
