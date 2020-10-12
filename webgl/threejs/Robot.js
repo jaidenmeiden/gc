@@ -204,7 +204,7 @@ function generateMaterials() {
         wireframe:true
     });
     material[8] = new THREE.MeshBasicMaterial({
-        color: new THREE.Color("rgb(0, 0, 0)"),
+        color: new THREE.Color("rgb(255, 255, 255)"),
         wireframe:true
     });
 }
