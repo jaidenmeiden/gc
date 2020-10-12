@@ -163,16 +163,37 @@ function rotate(event)  {
     let x = event.clientX;
     let y = event.clientY;
 
+    let derecha = false, abajo = false;
+    let actualCamera = null;
+
+    // Conocer el cuadrante de la seleccion
+    if(x>window.innerWidth/2){
+        x -= window.innerWidth/2;
+        derecha = true;
+    };
+    if(y>window.innerHeight/2){
+        y -= window.innerHeight/2;
+        abajo = true;
+    };
+
+    if(derecha)
+        if(abajo) actualCamera = camera;
+        else actualCamera = perfil;
+    else
+    if(abajo) actualCamera = planta;
+    else actualCamera = alzado;
+
+
     // Convertir al cuadrado canonico (2x2)
-    x = ( x/window.innerWidth ) * 2 - 1;
-    y = -( y/window.innerHeight ) * 2 + 1;
+    x = ( 2*x/window.innerWidth ) * 2 - 1;
+    y = -( 2*y/window.innerHeight ) * 2 + 1;
 
     // Construccion del rayo e interseccion con a escena
     let rayo = new THREE.Raycaster();
-    rayo.setFromCamera( new THREE.Vector2(x,y), camera);
+    rayo.setFromCamera( new THREE.Vector2(x,y), actualCamera);
 
     //Capturar las intersecciones
-    var interseccion = rayo.intersectObjects( scene.children, true );
+    var interseccion = rayo.intersectObjects( scene.children, true);
 
     if(interseccion.length>0)
         interseccion[0].object.rotation.y += Math.PI / 4;
