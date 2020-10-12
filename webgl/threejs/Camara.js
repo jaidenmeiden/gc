@@ -11,6 +11,7 @@ let renderer, scene, camera;
 let esferacubo, cubo, esfera, angulo = 0;
 let l = b = -4;
 let r = t = -l;
+let cameraController;
 
 // Acciones
 init();
@@ -39,6 +40,11 @@ function init() {
     scene.add(camera);//Agregamos la camara a la escena
     camera.position.set(0.5,3,9);// Posición e la camara (Diferente a la posición  defecto)
     camera.lookAt(new THREE.Vector3(0,0,0)); // A donde esta mirando la cámara
+
+    // Controlador de camara
+    cameraController = new THREE.OrbitControls( camera, renderer.domElement );
+    cameraController.target.set(0,0,0);
+    cameraController.noKeys = true;
 
     // Captura de evetos
     window.addEventListener('resize', updateAspectRatio);
@@ -94,7 +100,7 @@ function updateAspectRatio() {
     let ar = window.innerWidth/window.innerHeight;
 
     // Para camara ortográfica
-    /*if(ar > 1){
+    /*if (ar > 1) {
         camera.left = l * ar;
         camera.right = r * ar;
         camera.bottom = l;
