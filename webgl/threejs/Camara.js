@@ -140,17 +140,18 @@ function updateAspectRatio() {
     let ar = window.innerWidth/window.innerHeight;
 
     // Para camara ortográfica
-    /*if (ar > 1) {
-        camera.left = l * ar;
-        camera.right = r * ar;
-        camera.bottom = l;
-        camera.top = r;
-    } else {
-        camera.left = l;
-        camera.right = r;
-        camera.bottom = l * ar;
-        camera.top = r * ar;
-    }*/
+    if(ar>1){
+        alzado.left = perfil.left = planta.left = l * ar;
+        alzado.right = perfil.right = planta.right = r * ar;
+        alzado.top = perfil.top = planta.top = t;
+        alzado.bottom = perfil.bottom = planta.bottom = b;
+    }
+    else{
+        alzado.left = perfil.left = planta.left = l;
+        alzado.right = perfil.right = planta.right = r;
+        alzado.top = perfil.top = planta.top = t/ar;
+        alzado.bottom = perfil.bottom = planta.bottom = b/ar;
+    }
 
     // Para camara perpectiva
     camera.aspect = ar;
