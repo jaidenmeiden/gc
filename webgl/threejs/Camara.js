@@ -9,6 +9,8 @@ let renderer, scene, camera;
 
 // Variables globales
 let esferacubo, cubo, esfera, angulo = 0;
+let l = b = -4;
+let r = t = -l;
 
 // Acciones
 init();
@@ -32,10 +34,14 @@ function init() {
 
     // Camara
     let ar = window.innerWidth / window.innerHeight;// Razón de aspecto
-    camera = new THREE.PerspectiveCamera( 50, ar, 0.1, 100 ); // Inicializa camara (Angulo, razón de aspecto, Distancia con efecto, Distancia sin efecto)
+    //camera = new THREE.PerspectiveCamera( 50, ar, 0.1, 100 ); // Inicializa camara (Angulo, razón de aspecto, Distancia con efecto, Distancia sin efecto)
+    camera = new THREE.OrthographicCamera(l, r, t, b, -20, 20);
     scene.add(camera);//Agregamos la camara a la escena
     camera.position.set(0.5,3,9);// Posición e la camara (Diferente a la posición  defecto)
-    camera.lookAt(new THREE.Vector3(0,2,0)); // A donde esta mirando la cámara
+    camera.lookAt(new THREE.Vector3(0,0,0)); // A donde esta mirando la cámara
+
+    // Captura de evetos
+    window.addEventListener('resize', updateAspectRatio);
 }
 
 function loadScene() {
@@ -77,6 +83,29 @@ function loadScene() {
     cubo.add(new THREE.AxisHelper(1)); // Ayudante de ejes para el cubo
     scene.add( new THREE.AxisHelper(3) ); // Ayudante de ejes para la escena
 
+}
+
+function updateAspectRatio() {
+    // Indicarle al motor las nuevas dimensiones del canvas
+    // Renueva la relación de aspecto de la camara
+    // Ajustar el tamaño del canvas
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    // Razón de aspecto
+    let ar = window.innerWidth/window.innerHeight;
+
+    if(ar > 1){
+        camera.left = l * ar;
+        camera.right = r * ar;
+        camera.bottom = l;
+        camera.top = r;
+    } else {
+        camera.left = l;
+        camera.right = r;
+        camera.bottom = l * ar;
+        camera.top = r * ar;
+    }
+
+    camera.updateProjectionMatrix();
 }
 
 function update() {

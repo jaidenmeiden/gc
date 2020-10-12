@@ -39,6 +39,7 @@ function init() {
     // Camara
     let ar = window.innerWidth / window.innerHeight;// Razón de aspecto
     camera = new THREE.PerspectiveCamera( 40, ar, 0.1, 7000); // Inicializa camara (Angulo, razón de aspecto, Distancia con efecto, Distancia sin efecto)
+    //camera = new THREE.OrthographicCamera( -50, 50, 50, -50, 1, 1000 );
     scene.add(camera);//Agregamos la camara a la escena
     // Posición e la camara (Diferente a la posición  defecto)
     //camera.position.set(100,0,0);
