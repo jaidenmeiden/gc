@@ -8,7 +8,7 @@
 let renderer, scene, camera;
 
 // Variables globales
-let esferacubo, cubo, angulo = 0;
+let esferacubo, cubo, esfera, angulo = 0;
 
 // Acciones
 init();
@@ -42,7 +42,10 @@ function loadScene() {
     // Cargar la escena con objetos
 
     // Materiales
-    let material = new THREE.MeshBasicMaterial({color:'yellow',wireframe:true}); //DEfinimos el material
+    let material = new THREE.MeshBasicMaterial({
+        color:new THREE.Color("rgb(255, 64, 0)"),
+        wireframe:true
+    }); //DEfinimos el material
     //Le decimos que contruya el objeto amarillo y que solo muestre las aristas
 
     // Geometrias
@@ -51,18 +54,13 @@ function loadScene() {
 
     // Objetos
     cubo = new THREE.Mesh( geocubo, material );// Dobujamos un cubo
-    cubo.position.x = -1; // Aplicar desplazamiento al cubo
-    cubo.rotation.y = Math.PI/4;
-    // Tener presente que la trasformación de rotación sucede primero sin importar el orden de los comandos
-    // Orden: Scaling, Rotation (Z, Y, X) and Translation y se aplica de derecha a izquierda (TRS)
-    // El orden se peude formatear con la instrucción: tela.matrixAutoUpdate = false;
+    cubo.position.x = -1;
 
-    let esfera = new THREE.Mesh( geoesfera, material );
+    esfera = new THREE.Mesh( geoesfera, material );
     esfera.position.x = 1;
 
     esferacubo = new THREE.Object3D();
     esferacubo.position.y = 1;
-    esferacubo.rotation.y = angulo;
 
     // Modelo importado
     var loader = new THREE.ObjectLoader();
