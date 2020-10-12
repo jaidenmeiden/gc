@@ -180,8 +180,8 @@ function rotate(event)  {
         if(abajo) actualCamera = camera;
         else actualCamera = perfil;
     else
-    if(abajo) actualCamera = planta;
-    else actualCamera = alzado;
+        if(abajo) actualCamera = planta;
+        else actualCamera = alzado;
 
 
     // Convertir al cuadrado canonico (2x2)
