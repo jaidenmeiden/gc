@@ -8,7 +8,7 @@
 let renderer, scene, camera;
 
 // Variables globales
-let esferacubo, cubo, esfera, angulo = 0;
+let esferacubo, cubo, esfera;
 let l = b = -4;
 let r = t = -l;
 let cameraController;
@@ -48,16 +48,21 @@ function init() {
 
     // Captura de evetos
     window.addEventListener('resize', updateAspectRatio);
+    renderer.domElement.addEventListener('dblclick', rotate);
 }
 
 function loadScene() {
     // Cargar la escena con objetos
 
     // Materiales
-    let material = new THREE.MeshBasicMaterial({
+    let material1 = new THREE.MeshBasicMaterial({
         color:new THREE.Color("rgb(255, 64, 0)"),
         wireframe:true
-    }); //DEfinimos el material
+    });
+    let material2 = new THREE.MeshBasicMaterial({
+        color: new THREE.Color("rgb(64, 255, 0)"),
+        wireframe:true
+    });
     //Le decimos que contruya el objeto amarillo y que solo muestre las aristas
 
     // Geometrias
@@ -65,10 +70,10 @@ function loadScene() {
     let geoesfera = new THREE.SphereGeometry(1, 30, 30);
 
     // Objetos
-    cubo = new THREE.Mesh( geocubo, material );// Dobujamos un cubo
+    cubo = new THREE.Mesh( geocubo, material1 );// Dobujamos un cubo
     cubo.position.x = -1;
 
-    esfera = new THREE.Mesh( geoesfera, material );
+    esfera = new THREE.Mesh( geoesfera, material2 );
     esfera.position.x = 1;
 
     esferacubo = new THREE.Object3D();
@@ -116,6 +121,26 @@ function updateAspectRatio() {
     camera.aspect = ar;
 
     camera.updateProjectionMatrix();
+}
+
+function rotate(event)  {
+    // Localiza el objeto seleccionado y lo gira 45 grados
+    let x = event.clientX;
+    let y = event.clientY;
+
+    // Convertir al cuadrado canonico (2x2)
+    x = ( x/window.innerWidth ) * 2 - 1;
+    y = -( y/window.innerHeight ) * 2 + 1;
+
+    // Construccion del rayo e interseccion con a escena
+    let rayo = new THREE.Raycaster();
+    rayo.setFromCamera( new THREE.Vector2(x,y), camera);
+
+    //Capturar las intersecciones
+    var interseccion = rayo.intersectObjects( scene.children, true );
+
+    if(interseccion.length>0)
+        interseccion[0].object.rotation.y += Math.PI / 4;
 }
 
 function update() {
