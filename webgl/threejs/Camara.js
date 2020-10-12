@@ -12,6 +12,7 @@ let esferacubo, cubo, esfera;
 let l = b = -4;
 let r = t = -l;
 let cameraController;
+let alzado, planta, perfil;
 
 // Acciones
 init();
@@ -35,11 +36,7 @@ function init() {
 
     // Camara
     let ar = window.innerWidth / window.innerHeight;// Razón de aspecto
-    camera = new THREE.PerspectiveCamera( 50, ar, 0.1, 100 ); // Inicializa camara (Angulo, razón de aspecto, Distancia con efecto, Distancia sin efecto)
-    //camera = new THREE.OrthographicCamera(l, r, t, b, -20, 20);
-    scene.add(camera);//Agregamos la camara a la escena
-    camera.position.set(0.5,3,9);// Posición e la camara (Diferente a la posición  defecto)
-    camera.lookAt(new THREE.Vector3(0,0,0)); // A donde esta mirando la cámara
+    setCameras(ar);
 
     // Controlador de camara
     cameraController = new THREE.OrbitControls( camera, renderer.domElement );
@@ -94,6 +91,43 @@ function loadScene() {
     cubo.add(new THREE.AxisHelper(1)); // Ayudante de ejes para el cubo
     scene.add( new THREE.AxisHelper(3) ); // Ayudante de ejes para la escena
 
+}
+
+function setCameras(ar){
+    // Construir las cuatro camaras (Planta, Alzado, Perfil y Perspectiva)
+    var origen = new THREE.Vector3(0,0,0);
+
+    // Ortograficas
+    let camaraOrthographic;
+    if(ar > 1){
+        camaraOrthographic = new THREE.OrthographicCamera(l*ar, r*ar, t, b, -20, 20);
+    }
+    else{
+        camaraOrthographic = new THREE.OrthographicCamera(l, r, t/ar, b/ar, -20, 20);
+    }
+
+    alzado = camaraOrthographic.clone();
+    alzado.position.set(0,0,4);
+    alzado.lookAt(origen);
+    perfil = camaraOrthographic.clone();
+    perfil.position.set(4,0,0);
+    perfil.lookAt(origen);
+    planta = camaraOrthographic.clone();
+    planta.position.set(0,4,0);
+    planta.lookAt(origen);
+    planta.up = new THREE.Vector3(0,0,-1);
+
+    // Perspectiva
+    let cameraPerspective = new THREE.PerspectiveCamera( 50, ar, 0.1, 100 );
+    cameraPerspective.position.set(0.5,3,9);
+    cameraPerspective.lookAt(new THREE.Vector3(0,0,0));
+
+    camera = cameraPerspective.clone();
+
+    scene.add(alzado);
+    scene.add(perfil);
+    scene.add(planta);
+    scene.add(camera);
 }
 
 function updateAspectRatio() {
@@ -151,5 +185,24 @@ function render() {
     // Dibujar cada frame y lo muestra
     requestAnimationFrame(render);// Llega el evento de dibujo en llamada recursiva
     update();//Actualiza la escena
-    renderer.render( scene, camera ); // Le decimos al motor que renderice
+
+    renderer.clear();
+
+    // Para cada rebder debo indeicar el viewPort
+
+    renderer.setViewport(0,0,
+        window.innerWidth/2,window.innerHeight/2);
+    renderer.render( scene, alzado );
+
+    renderer.setViewport(0,window.innerHeight/2,
+        window.innerWidth/2,window.innerHeight/2);
+    renderer.render( scene, planta );
+
+    renderer.setViewport(window.innerWidth/2,0,
+        window.innerWidth/2,window.innerHeight/2);
+    renderer.render( scene, perfil );
+
+    renderer.setViewport(window.innerWidth/2,window.innerHeight/2,
+        window.innerWidth/2,window.innerHeight/2);
+    renderer.render( scene, camera );
 }
