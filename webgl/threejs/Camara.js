@@ -28,6 +28,7 @@ function init() {
     renderer.setSize(window.innerWidth,window.innerHeight);
     //Color con el que se formatea el contenedor
     renderer.setClearColor(new THREE.Color(0x0000AA));
+    renderer.autoClear = false; //Para que no borre cada vez que defino un ViewPort
     //Agregamos el elemento canvas de renderer al contenedor
     document.getElementById('container').appendChild(renderer.domElement);
 
