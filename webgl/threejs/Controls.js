@@ -52,6 +52,12 @@ function init() {
     cameraController = new THREE.OrbitControls( camera, renderer.domElement );
     cameraController.target.set(0,0,0);
 
+    // STATS --> stats.update() en update()
+    stats = new Stats();
+    stats.setMode(0);					// Muestra FPS
+    stats.domElement.style.cssText = 'position:absolute;bottom:0px;left:0px;';
+    document.getElementById('container').appendChild(stats.domElement);
+
     // Captura de eventos
     window.addEventListener('resize', updateAspectRatio);
 }
