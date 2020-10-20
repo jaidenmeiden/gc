@@ -8,16 +8,16 @@
  */
 
 // Globales convenidas por threejs
-var renderer, scene, camera;
+let renderer, scene, camera;
 // Control de camara
-var cameraControls;
+let cameraControls;
 // Monitor de recursos
-var stats;
+let stats;
 // Mundo fisico
-var world, reloj;
+let world, reloj;
 // Objetos
 const nesferas = 20;
-var esferas = [];
+let esferas = [];
 
 initPhysicWorld();
 initVisualWorld();
@@ -28,7 +28,7 @@ render();
  * Construye una bola con cuerpo y vista
  */
 function esfera( radio, posicion, material ){
-    var masa = 1;
+    let masa = 1;
     this.body = new CANNON.Body( {mass: masa, material: material} );
     this.body.addShape( new CANNON.Sphere( radio ) );
     this.body.position.copy( posicion );
@@ -50,40 +50,40 @@ function initPhysicWorld()
     world.solver.iterations = 10;
 
     // Material y comportamiento
-    var groundMaterial = new CANNON.Material("groundMaterial");
-    var materialEsfera = new CANNON.Material("sphereMaterial");
+    let groundMaterial = new CANNON.Material("groundMaterial");
+    let materialEsfera = new CANNON.Material("sphereMaterial");
     world.addMaterial( materialEsfera );
     world.addMaterial( groundMaterial );
     // -existe un defaultContactMaterial con valores de restitucion y friccion por defecto
     // -en caso que el material tenga su friccion y restitucion positivas, estas prevalecen 
-    var sphereGroundContactMaterial = new CANNON.ContactMaterial(groundMaterial,materialEsfera,
+    let sphereGroundContactMaterial = new CANNON.ContactMaterial(groundMaterial,materialEsfera,
         { friction: 0.3,
             restitution: 0.7 });
     world.addContactMaterial(sphereGroundContactMaterial);
 
     // Suelo
-    var groundShape = new CANNON.Plane();
-    var ground = new CANNON.Body({ mass: 0, material: groundMaterial });
+    let groundShape = new CANNON.Plane();
+    let ground = new CANNON.Body({ mass: 0, material: groundMaterial });
     ground.addShape(groundShape);
     ground.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
     world.addBody(ground);
 
     // Paredes
-    var backWall = new CANNON.Body( {mass:0, material:groundMaterial} );
+    let backWall = new CANNON.Body( {mass:0, material:groundMaterial} );
     backWall.addShape( new CANNON.Plane() );
     backWall.position.z = -5;
     world.addBody( backWall );
-    var frontWall = new CANNON.Body( {mass:0, material:groundMaterial} );
+    let frontWall = new CANNON.Body( {mass:0, material:groundMaterial} );
     frontWall.addShape( new CANNON.Plane() );
     frontWall.quaternion.setFromEuler(0,Math.PI,0,'XYZ');
     frontWall.position.z = 5;
     world.addBody( frontWall );
-    var leftWall = new CANNON.Body( {mass:0, material:groundMaterial} );
+    let leftWall = new CANNON.Body( {mass:0, material:groundMaterial} );
     leftWall.addShape( new CANNON.Plane() );
     leftWall.position.x = -5;
     leftWall.quaternion.setFromEuler(0,Math.PI/2,0,'XYZ');
     world.addBody( leftWall );
-    var rightWall = new CANNON.Body( {mass:0, material:groundMaterial} );
+    let rightWall = new CANNON.Body( {mass:0, material:groundMaterial} );
     rightWall.addShape( new CANNON.Plane() );
     rightWall.position.x = 5;
     rightWall.quaternion.setFromEuler(0,-Math.PI/2,0,'XYZ');
@@ -103,13 +103,14 @@ function initVisualWorld()
 
     // Crear el grafo de escena
     scene = new THREE.Scene();
+    scene.add( new THREE.AxisHelper(3) ); // Ayudante de ejes para la escena
 
     // Reloj
     reloj = new THREE.Clock();
     reloj.start();
 
     // Crear y situar la camara
-    var aspectRatio = window.innerWidth / window.innerHeight;
+    let aspectRatio = window.innerWidth / window.innerHeight;
     camera = new THREE.PerspectiveCamera( 75, aspectRatio , 0.1, 100 );
     camera.position.set( 2,5,10 );
     camera.lookAt( new THREE.Vector3( 0,0,0 ) );
@@ -132,19 +133,19 @@ function initVisualWorld()
 function loadWorld()
 {
     // Genera las esferas
-    var materialEsfera;
+    let materialEsfera;
     for( i=0; i<world.materials.length; i++){
         if( world.materials[i].name === "sphereMaterial" ) materialEsfera = world.materials[i];
     }
-    for (var i = 0; i < nesferas; i++) {;
-        var e = new esfera( 1/2, new CANNON.Vec3( -1, i+1, 0 ), materialEsfera );
+    for (let i = 0; i < nesferas; i++) {;
+        let e = new esfera( 1/2, new CANNON.Vec3( -1, i+1, 0 ), materialEsfera );
         world.addBody( e.body );
         scene.add( e.visual );
         esferas.push( e );
     };
     // Restricciones
-    for (var i = 0; i < esferas.length-1; i++) {
-        var restriccion = new CANNON.PointToPointConstraint(esferas[i].body,
+    for (let i = 0; i < esferas.length-1; i++) {
+        let restriccion = new CANNON.PointToPointConstraint(esferas[i].body,
             new CANNON.Vec3( 0, 1/2, 0),
             esferas[i+1].body,
             new CANNON.Vec3( 0, -1/2, 0) );
@@ -153,21 +154,21 @@ function loadWorld()
 
     // El molinete: Es un disco fijo (masa=0) con velocidad angular que se representa como
     // un disco girando con tween
-    var discShape = new CANNON.Cylinder(2,2,0.1,10); // ojo: eje en z
-    var discBody = new CANNON.Body({ mass: 0 });
+    let discShape = new CANNON.Cylinder(2,2,0.1,10); // ojo: eje en z
+    let discBody = new CANNON.Body({ mass: 0 });
     discBody.addShape(discShape);
     discBody.quaternion.setFromEuler( -Math.PI/2,0,0 );
     discBody.angularVelocity.set(0,3,0);
     discBody.angularDamping = 0.1;
     world.addBody(discBody);
 
-    var molinete = new THREE.Mesh( new THREE.CylinderGeometry(2,2,0.1),
+    let molinete = new THREE.Mesh( new THREE.CylinderGeometry(2,2,0.1),
         new THREE.MeshBasicMaterial( {wireframe:true}) );
     scene.add( molinete );
     molinete.add( new THREE.AxisHelper(1) );
     molinete.position.copy( discBody.position );
 
-    var giro = new TWEEN.Tween( molinete.rotation ).to( {x:0, y:2*Math.PI, z:0}, 1000 );
+    let giro = new TWEEN.Tween( molinete.rotation ).to( {x:0, y:2*Math.PI, z:0}, 1000 );
     giro.repeat(Infinity);
     giro.start();
 
@@ -192,10 +193,10 @@ function updateAspectRatio()
  */
 function update()
 {
-    var segundos = reloj.getDelta();	// tiempo en segundos que ha pasado
+    let segundos = reloj.getDelta();	// tiempo en segundos que ha pasado
     world.step( segundos );				// recalcula el mundo tras ese tiempo
 
-    for (var i = 0; i < esferas.length; i++) {
+    for (let i = 0; i < esferas.length; i++) {
         esferas[i].visual.position.copy( esferas[i].body.position );
         esferas[i].visual.quaternion.copy( esferas[i].body.quaternion );
     };
