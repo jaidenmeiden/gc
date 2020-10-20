@@ -10,7 +10,8 @@
 let renderer, scene, camera;
 let cameraController;
 let alzado, planta, perfil;
-let cenital;
+// Global GUI
+let effectController;
 
 // Variables globales
 let suelo, robot, base;
@@ -18,12 +19,13 @@ let brazo, eje, esparrago, rutula;
 let antebrazo, disco, nervios = [];
 let mano, dedos = [], pinzas = [];
 let x = [1, 1, -1, -1], z = [-1, 1, 1, -1], material = [], angulo = 0;
-var l = b = -70;
-var r = t = -l;
+let l = b = -70;
+let r = t = -l;
 
 // Acciones
 init();
 loadScene();
+setupGUI();
 render();
 
 function init() {
@@ -49,7 +51,6 @@ function init() {
     // Controlador de camara
     cameraController = new THREE.OrbitControls( camera, renderer.domElement );
     cameraController.target.set(0,0,0);
-    cameraController.noKeys = true;
 
     // Captura de eventos
     window.addEventListener('resize', updateAspectRatio);
@@ -162,6 +163,15 @@ function loadScene() {
 function update() {
     // Cambios entre frames
     cameraController.update();
+    // Actualiza los FPS
+    stats.update();
+    base.rotation.y = effectController.giroBase * Math.PI / 180
+    brazo.rotation.z = effectController.giroBrazo * Math.PI / 180
+    antebrazo.rotation.y = effectController.giroAntebrazo * Math.PI / 180
+    antebrazo.rotation.z = effectController.giroRotula * Math.PI / 180
+    mano.rotation.y = effectController.giroMano * Math.PI / 180
+    dedos[0].position.y = 1 - effectController.aperturaPinza
+    dedos[1].position.y = -1 + effectController.aperturaPinza
 }
 
 function render() {
@@ -182,7 +192,7 @@ function render() {
 
 function setCameras(ar){
     // Construir las cuatro camaras (Planta, Alzado, Perfil y Perspectiva)
-    var origen = new THREE.Vector3(0,0,0);
+    let origen = new THREE.Vector3(0,0,0);
 
     // Ortograficas
     let camaraOrthographic;
@@ -214,6 +224,42 @@ function setCameras(ar){
     scene.add(perfil);*/
     scene.add(planta);
     scene.add(camera);
+}
+
+function setupGUI() {
+
+    //Interfaz de usuario
+    effectController = {
+        giroBase: 0,
+        giroBrazo: 0,
+        giroRotula: 0,
+        giroAntebrazo: 0,
+        giroMano: 0,
+        aperturaPinza: 15,
+        reiniciar: function () {
+            angulo = 0
+            location.reload();
+        },
+        color: "rgb(255,0,0)"
+    }
+    let gui = new dat.GUI();
+    let sub = gui.addFolder("Controles Robot")
+    sub.add(effectController, "giroBase", -180, 180, 1).name("G. de la base en Y");
+    sub.add(effectController, "giroBrazo", -45, 45, 1).name("G. del brazo en Z");
+    sub.add(effectController, "giroAntebrazo", -180, 180, 1).name("G. del antebrazo en Y");
+    sub.add(effectController, "giroRotula", -90, 90, 1).name("G. del antebrazo en Z");
+    sub.add(effectController, "giroMano", -40, 220, 1).name("R. de la pinza en Z");
+    sub.add(effectController, "aperturaPinza", 0, 15, 1).name("A/C de la pinza en Z");
+
+    sub.add(effectController, "reiniciar")
+    let sensorColor = sub.addColor(effectController, "color").name("Color")
+    sensorColor.onChange(function (color) {
+        robot.traverse(function (hijo) {
+            if (hijo instanceof THREE.Mesh) {
+                hijo.material.color = new THREE.Color(color)
+            }
+        })
+    });
 }
 
 function updateAspectRatio() {

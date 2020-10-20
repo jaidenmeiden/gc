@@ -10,7 +10,6 @@
 let renderer, scene, camera;
 let cameraController;
 let alzado, planta, perfil;
-let cenital;
 
 // Variables globales
 let suelo, robot, base;
