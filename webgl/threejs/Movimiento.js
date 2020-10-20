@@ -8,6 +8,9 @@
 
 // Variables imprescindibles
 let renderer, scene, camera;
+let cameraController;
+let alzado, planta, perfil;
+let cenital;
 
 // Variables globales
 let suelo, robot, base;
@@ -15,6 +18,8 @@ let brazo, eje, esparrago, rutula;
 let antebrazo, disco, nervios = [];
 let mano, dedos = [], pinzas = [];
 let x = [1, 1, -1, -1], z = [-1, 1, 1, -1], material = [], angulo = 0;
+var l = b = -70;
+var r = t = -l;
 
 // Acciones
 init();
@@ -30,6 +35,7 @@ function init() {
     renderer.setSize(window.innerWidth,window.innerHeight);
     //Color con el que se formatea el contenedor
     renderer.setClearColor(new THREE.Color(0x0000AA));
+    renderer.autoClear = false; //Para que no borre cada vez que defino un ViewPort
     //Agregamos el elemento canvas de renderer al contenedor
     document.getElementById('container').appendChild(renderer.domElement);
 
@@ -38,12 +44,15 @@ function init() {
 
     // Camara
     let ar = window.innerWidth / window.innerHeight;// Razón de aspecto
-    camera = new THREE.PerspectiveCamera( 40, ar, 0.1, 7000); // Inicializa camara (Angulo, razón de aspecto, Distancia con efecto, Distancia sin efecto)
-    //camera = new THREE.OrthographicCamera( -50, 50, 50, -50, 1, 1000 );
-    scene.add(camera);//Agregamos la camara a la escena
-    // Posición e la camara (Diferente a la posición  defecto)
-    camera.position.set(500,500,500);
-    camera.lookAt(new THREE.Vector3(0,0,0)); // A donde esta mirando la cámara
+    setCameras(ar);
+
+    // Controlador de camara
+    cameraController = new THREE.OrbitControls( camera, renderer.domElement );
+    cameraController.target.set(0,0,0);
+    cameraController.noKeys = true;
+
+    // Captura de eventos
+    window.addEventListener('resize', updateAspectRatio);
 }
 
 function loadScene() {
@@ -152,15 +161,86 @@ function loadScene() {
 
 function update() {
     // Cambios entre frames
-    angulo += Math.PI/400;
-    robot.rotation.y = angulo;
+    cameraController.update();
 }
 
 function render() {
     // Dibujar cada frame y lo muestra
     requestAnimationFrame(render);// Llega el evento de dibujo en llamada recursiva
     update();//Actualiza la escena
-    renderer.render( scene, camera ); // Le decimos al motor que renderice
+    renderer.clear();
+
+    renderer.setViewport(0,0,
+        window.innerWidth,window.innerHeight);
+    renderer.render( scene, camera );
+
+    // Camara perspectiva
+    renderer.setViewport(0,0,
+        window.innerWidth/4,window.innerHeight/4);
+    renderer.render( scene, planta );
+}
+
+function setCameras(ar){
+    // Construir las cuatro camaras (Planta, Alzado, Perfil y Perspectiva)
+    var origen = new THREE.Vector3(0,0,0);
+
+    // Ortograficas
+    let camaraOrthographic;
+    if(ar > 1){
+        camaraOrthographic = new THREE.OrthographicCamera(l*ar, r*ar, t, b, -20, 20);
+    }
+    else{
+        camaraOrthographic = new THREE.OrthographicCamera(l, r, t/ar, b/ar, -20, 20);
+    }
+
+    alzado = camaraOrthographic.clone();
+    alzado.position.set(0,0,4);
+    alzado.lookAt(origen);
+    perfil = camaraOrthographic.clone();
+    perfil.position.set(4,0,0);
+    perfil.lookAt(origen);
+    planta = camaraOrthographic.clone();
+    planta.position.set(0,4,0);
+    planta.lookAt(origen);
+
+    // Perspectiva
+    let cameraPerspective = new THREE.PerspectiveCamera(40, ar, 0.1, 7000); // Inicializa camara (Angulo, razón de aspecto, Distancia con efecto, Distancia sin efecto)
+    cameraPerspective.position.set(500, 500, 500);
+    cameraPerspective.lookAt(new THREE.Vector3(0,0,0)); // A donde esta mirando la cámara
+
+    camera = cameraPerspective.clone();
+
+    /*scene.add(alzado);
+    scene.add(perfil);*/
+    scene.add(planta);
+    scene.add(camera);
+}
+
+function updateAspectRatio() {
+    // Indicarle al motor las nuevas dimensiones del canvas
+    // Renueva la relación de aspecto de la camara
+    // Ajustar el tamaño del canvas
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    // Razón de aspecto
+    let ar = window.innerWidth/window.innerHeight;
+
+    // Para camara ortográfica
+    if(ar>1){
+        alzado.left = perfil.left = planta.left = l * ar;
+        alzado.right = perfil.right = planta.right = r * ar;
+        alzado.top = perfil.top = planta.top = t;
+        alzado.bottom = perfil.bottom = planta.bottom = b;
+    }
+    else{
+        alzado.left = perfil.left = planta.left = l;
+        alzado.right = perfil.right = planta.right = r;
+        alzado.top = perfil.top = planta.top = t/ar;
+        alzado.bottom = perfil.bottom = planta.bottom = b/ar;
+    }
+
+    // Para camara perpectiva
+    camera.aspect = ar;
+    camera.updateProjectionMatrix();
 }
 
 function generateMaterials() {
