@@ -8,6 +8,8 @@
 // Variables imprescindibles
 let renderer, scene, camera;
 
+let cameraControl;
+
 // Variables globales
 let esferacubo, cubo, angulo = 0;
 
@@ -19,75 +21,120 @@ render();
 function init() {
     // Crear el motor, la escena y la camara
 
-    // Motor de render
-    renderer = new THREE.WebGLRenderer();
-    //Tamaño dela area donde vamos a dibujar
-    renderer.setSize(window.innerWidth,window.innerHeight);
-    //Color con el que se formatea el contenedor
-    renderer.setClearColor(new THREE.Color(0x0000AA));
-    //Agregamos el elemento canvas de renderer al contenedor
-    document.getElementById('container').appendChild(renderer.domElement);
+	// Motor de render
+	renderer = new THREE.WebGLRenderer();
+	renderer.setSize(window.innerWidth,window.innerHeight);
+	renderer.setClearColor( new THREE.Color(0xFFFFFF) );
+	renderer.shadowMap.enabled = true;
+	document.getElementById('container').appendChild(renderer.domElement);
 
-    // Escena
-    scene = new THREE.Scene();
+	// Escena
+	scene = new THREE.Scene();
 
-    // Camara
-    let ar = window.innerWidth / window.innerHeight;// Razón de aspecto
-    camera = new THREE.PerspectiveCamera( 50, ar, 0.1, 100 ); // Inicializa camara (Angulo, razón de aspecto, Distancia con efecto, Distancia sin efecto)
-    scene.add(camera);//Agregamos la camara a la escena
-    camera.position.set(0.5,3,9);// Posición e la camara (Diferente a la posición  defecto)
-    camera.lookAt(new THREE.Vector3(0,2,0)); // A donde esta mirando la cámara
+	// Camara
+	var ar = window.innerWidth / window.innerHeight;
+	camera = new THREE.PerspectiveCamera( 50, ar, 0.1, 100 );
+	scene.add(camera);
+	camera.position.set(0.5,3,9);
+	camera.lookAt(new THREE.Vector3(0,0,0));
 
+	cameraControl = new THREE.OrbitControls( camera, renderer.domElement );
+	cameraControl.target.set(0,0,0);
+
+	// Luces
+	var luzAmbiente = new THREE.AmbientLight(0xFFFFFF, 0.2);
+	scene.add( luzAmbiente );
+
+	var luzPuntual = new THREE.PointLight(0xFFFFFF,0.5);
+	luzPuntual.position.set( -10, 10, -10 );
+	scene.add( luzPuntual );
+
+	var luzDireccional = new THREE.DirectionalLight(0xFFFFFF,0.5);
+	luzDireccional.position.set(-10,5,10 );
+	scene.add(luzDireccional);
+
+	var luzFocal = new THREE.SpotLight(0xFFFFFF,0.5);
+	luzFocal.position.set( 10,10,1 );
+	luzFocal.target.position.set(0,0,0);
+	luzFocal.angle = Math.PI/10;
+	luzFocal.penumbra = 0.2;
+	luzFocal.castShadow = true;
+	scene.add(luzFocal);
 }
 
 function loadScene() {
     // Cargar la escena con objetos
 
-    // Materiales
-    let material = new THREE.MeshBasicMaterial({color:'yellow',wireframe:true}); //DEfinimos el material
-    //Le decimos que contruya el objeto amarillo y que solo muestre las aristas
+	// Texturas
+	var path = "images/";
+	var texturaSuelo = new THREE.TextureLoader().load(path+'wet_ground_512x512.jpg');
+	texturaSuelo.magFilter = THREE.LinearFilter;
+	texturaSuelo.minFilter = THREE.LinearFilter;
+	texturaSuelo.repeat.set(3,2);
+	texturaSuelo.wrapS = texturaSuelo.wrapT = THREE.MirroredRepeatWrapping;
 
-    // Geometrias
-    let geocubo = new THREE.BoxGeometry(2,2,2); // Geometría del cubo
-    let geoesfera = new THREE.SphereGeometry(1, 30, 30);
+	var texturaCubo = new THREE.TextureLoader().load(path+'wood512.jpg');
 
-    // Objetos
-    cubo = new THREE.Mesh( geocubo, material );// Dobujamos un cubo
-    cubo.position.x = -1; // Aplicar desplazamiento al cubo
-    cubo.rotation.y = Math.PI/4;
-    // Tener presente que la trasformación de rotación sucede primero sin importar el orden de los comandos
-    // Orden: Scaling, Rotation (Z, Y, X) and Translation y se aplica de derecha a izquierda (TRS)
-    // El orden se peude formatear con la instrucción: tela.matrixAutoUpdate = false;
+	var texturaEsfera = new THREE.TextureLoader().load(path+'Earth.jpg');
 
-    let esfera = new THREE.Mesh( geoesfera, material );
-    esfera.position.x = 1;
+	// Materiales
+	var materialBasico = new THREE.MeshBasicMaterial({color:'yellow'});
+	var materialMate = new THREE.MeshLambertMaterial({color:'red', map:texturaCubo});
+	var matsuelo = new THREE.MeshLambertMaterial({color:'white', map: texturaSuelo});
+	var materialBrillante = new THREE.MeshPhongMaterial({color:'white',
+		                                                 specular:'white',
+		                                                 shininess: 50,
+		                                                 map:texturaEsfera });
 
-    esferacubo = new THREE.Object3D();
-    esferacubo.position.y = 1;
-    esferacubo.rotation.y = angulo;
+	// Geometrias
+	var geocubo = new THREE.BoxGeometry(2,2,2);
+	var geoesfera = new THREE.SphereGeometry(1, 30, 30);
+	var geosuelo = new THREE.PlaneGeometry(20,20,200,200);
 
-    // Modelo importado
-    var loader = new THREE.ObjectLoader();
-    loader.load( 'models/soldado/soldado.json' ,
-        function(obj){
-            obj.position.y = 1;
-            cubo.add(obj);
-        });
+	// Objetos
+	cubo = new THREE.Mesh( geocubo, materialMate );
+	cubo.position.x = -1;
+	cubo.receiveShadow = true;
+	cubo.castShadow = true;
 
-    // Construir la escena
-    esferacubo.add(cubo);
-    esferacubo.add(esfera);
-    scene.add(esferacubo);
-    cubo.add(new THREE.AxisHelper(1)); // Ayudante de ejes para el cubo
-    scene.add( new THREE.AxisHelper(3) ); // Ayudante de ejes para la escena
+	var esfera = new THREE.Mesh( geoesfera, materialBrillante );
+	esfera.position.x = 1;
+	esfera.receiveShadow = true;
+	esfera.castShadow = true;
+
+	esferacubo = new THREE.Object3D();
+	esferacubo.position.y = 1;
+
+	var suelo = new THREE.Mesh( geosuelo, matsuelo );
+	suelo.rotation.x= -Math.PI/2;
+	suelo.position.y = -0.5;
+	suelo.receiveShadow = true;
+
+
+	// Modelo importado
+	var loader = new THREE.ObjectLoader();
+	loader.load( 'models/soldado/soldado.json' , 
+		         function(obj){
+		         	var objtx = new THREE.TextureLoader().load('models/soldado/soldado.png');
+		         	obj.material.map = objtx;
+		         	obj.position.y = 1;
+		         	obj.receiveShadow = true;
+					obj.castShadow = true;
+		         	cubo.add(obj);
+		         });
+
+	// Construir la escena
+	esferacubo.add(cubo);
+	esferacubo.add(esfera);
+	scene.add(esferacubo);
+	scene.add(suelo);
+	cubo.add(new THREE.AxisHelper(1));
+	scene.add( new THREE.AxisHelper(3));
 
 }
 
 function update() {
     // Cambios entre frames
-    angulo += Math.PI/100;
-    esferacubo.rotation.y = angulo;
-    cubo.rotation.x = angulo/2;
 
 }
 
