@@ -64,6 +64,7 @@ function init() {
 
 function loadScene() {
     // Cargar la escena con objetos
+    generateTextures();
     generateMaterials();
     // Geometrias
     const geosuelo = new THREE.PlaneGeometry(1000, 1000, 50, 50);
@@ -130,7 +131,7 @@ function loadScene() {
     dedos[0].position.y += 10;//Con respecto a mano
     dedos[0].rotation.x = Math.PI/2;
 
-    pinzas[0] = new THREE.Mesh(geopinza, materiales[1]);
+    pinzas[0] = new THREE.Mesh(geopinza, materiales[9]);
 
     dedos[1] = new THREE.Mesh(geopalma, materiales[8]);
     dedos[1].position.x += 20;
@@ -302,47 +303,78 @@ function updateAspectRatio() {
     camera.updateProjectionMatrix();
 }
 
+function generateTextures() {
+    // Materiales
+    let textureLoader = new THREE.TextureLoader()
+    textures[0] = textureLoader.load(path + 'wood.jpg');
+    textures[0].magFilter = THREE.LinearFilter;
+    textures[0].minFilter = THREE.LinearFilter;
+    textures[0].repeat.set(4, 3);
+    textures[0].wrapS = textures[0].wrapT = THREE.MirroredRepeatWrapping;
+    textures[1] = textureLoader.load(path + 'oxidado.jpg');
+    textures[2] = textureLoader.load(path + 'oxidado.jpg');
+    textures[3] = textureLoader.load(path + 'oxidado.jpg');
+    let walls = [path + 'Tenerife/posx.jpg', path + 'Tenerife/negx.jpg',
+        path + 'Tenerife/posy.jpg', path + 'Tenerife/negy.jpg',
+        path + 'Tenerife/posz.jpg', path + 'Tenerife/negz.jpg'
+    ];
+    textures[4] = new THREE.CubeTextureLoader().load(walls);
+    textures[5] = textureLoader.load(path + 'gold.jpg');
+    textures[6] = textureLoader.load(path + 'gold.jpg');
+    textures[7] = textureLoader.load(path + 'gold.jpg');
+}
+
 function generateMaterials() {
     // Materiales
     materiales[0] = new THREE.MeshBasicMaterial({
-        color: new THREE.Color("rgb(193, 51, 255)"),
-        wireframe:true
+        color: new THREE.Color("rgb(183, 177, 165)"),
+        map: textures[0]
     });
     materiales[1] = new THREE.MeshBasicMaterial({
-        color: new THREE.Color("rgb(255, 64, 0)"),
-        wireframe:true
+        color: new THREE.Color("rgb(122, 49, 19)"),
+        map: textures[1]
     });
     materiales[2] = new THREE.MeshBasicMaterial({
-        color: new THREE.Color("rgb(255, 191, 0)"),
-        wireframe:true
+        color: new THREE.Color("rgb(220, 172, 74)"),
+        map: textures[2]
     });
-    materiales[3] = new THREE.MeshBasicMaterial({
-        color: new THREE.Color("rgb(64, 255, 0)"),
-        wireframe:true
+    materiales[3] = new THREE.MeshLambertMaterial({
+        color: new THREE.Color("rgb(220, 172, 74)"),
+        wireframe: false,
+        map: textures[3]
     });
-    materiales[4] = new THREE.MeshBasicMaterial({
-        color: new THREE.Color("rgb(0, 128, 255)"),
-        wireframe:true
+    materiales[4] = new THREE.MeshPhongMaterial({
+        color: 'white',
+        specular: 'white',
+        shininess: 50,
+        envMap: textures[4]
     });
-    materiales[5] = new THREE.MeshBasicMaterial({
-        color: new THREE.Color("rgb(255, 0, 191)"),
-        wireframe:true
+    materiales[5] = new THREE.MeshPhongMaterial({
+        color: new THREE.Color("rgb(214, 175,58)"),
+        specular: new THREE.Color("rgb(214, 175,58)"),
+        shininess: 50,
+        wireframe: false,
+        map: textures[5]
     });
-    materiales[6] = new THREE.MeshBasicMaterial({
-        color: new THREE.Color("rgb(0, 255, 255)"),
-        wireframe:true
+    materiales[6] = new THREE.MeshPhongMaterial({
+        color: new THREE.Color("rgb(214, 175,58)"),
+        specular: new THREE.Color("rgb(214, 175,58)"),
+        shininess: 50,
+        wireframe: false,
+        map: textures[5]
     });
-    materiales[7] = new THREE.MeshBasicMaterial({
-        color: new THREE.Color("rgb(255, 255, 0)"),
-        wireframe:true
+    materiales[7] = new THREE.MeshPhongMaterial({
+        color: new THREE.Color("rgb(214, 175,58)"),
+        specular: new THREE.Color("rgb(214, 175,58)"),
+        shininess: 50,
+        wireframe: false,
+        map: textures[5]
     });
-    materiales[8] = new THREE.MeshBasicMaterial({
-        color: new THREE.Color("rgb(255, 255, 255)"),
-        wireframe:true
+    materiales[8] = new THREE.MeshLambertMaterial({
+        color: new THREE.Color("rgb(148, 95, 19)")
     });
-    materiales[9] = new THREE.MeshBasicMaterial({
-        color: new THREE.Color("rgb(255, 64, 101)"),
-        wireframe:true
+    materiales[9] = new THREE.MeshLambertMaterial({
+        color: new THREE.Color("rgb(148, 95, 19)")
     });
 }
 
