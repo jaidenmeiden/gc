@@ -13,7 +13,8 @@ let alzado, planta, perfil;
 // Global GUI
 let effectController;
 // Materiales y Texturas
-let materiales = []
+let path = "images/";
+let materiales = [], textures = [];
 
 // Variables globales
 let suelo, robot, base;
@@ -39,6 +40,7 @@ function init() {
     renderer.setSize(window.innerWidth,window.innerHeight);
     //Color con el que se formatea el contenedor
     renderer.setClearColor(new THREE.Color(0x0000AA));
+    renderer.shadowMap.enabled = true;
     renderer.autoClear = false; //Para que no borre cada vez que defino un ViewPort
     //Agregamos el elemento canvas de renderer al contenedor
     document.getElementById('container').appendChild(renderer.domElement);
@@ -54,11 +56,7 @@ function init() {
     cameraController = new THREE.OrbitControls( camera, renderer.domElement );
     cameraController.target.set(0,0,0);
 
-    // STATS --> stats.update() en update()
-    stats = new Stats();
-    stats.setMode(0);					// Muestra FPS
-    stats.domElement.style.cssText = 'position:absolute;bottom:0px;left:0px;';
-    document.getElementById('container').appendChild(stats.domElement);
+    addStats();
 
     // Captura de eventos
     window.addEventListener('resize', updateAspectRatio);
@@ -82,8 +80,7 @@ function loadScene() {
 
     // Objetos
     suelo = new THREE.Mesh(geosuelo, materiales[0]);
-    suelo.rotation.x += Math.PI/2;
-    suelo.rotation.z += Math.PI/4;
+    suelo.rotation.x += -1 * Math.PI/2;
 
     //Objeto robot (Add: base)
     robot = new THREE.Object3D();
@@ -140,7 +137,7 @@ function loadScene() {
     dedos[1].position.y += -10;//Con respecto a mano
     dedos[1].rotation.x = Math.PI/2;
 
-    pinzas[1] = new THREE.Mesh(geopinza, materiales[1]);
+    pinzas[1] = new THREE.Mesh(geopinza, materiales[9]);
     pinzas[1].rotation.x = Math.PI;
 
     //El grafo de escena es así:
@@ -166,72 +163,6 @@ function loadScene() {
     scene.add(robot);
     scene.add( new THREE.AxisHelper(1000) ); // Ayudante de ejes para la escena
 
-}
-
-function update() {
-    // Cambios entre frames
-    cameraController.update();
-    // Actualiza los FPS
-    stats.update();
-    base.rotation.y = effectController.giroBase * Math.PI / 180
-    brazo.rotation.z = effectController.giroBrazo * Math.PI / 180
-    antebrazo.rotation.y = effectController.giroAntebrazo * Math.PI / 180
-    antebrazo.rotation.z = effectController.giroRotula * Math.PI / 180
-    mano.rotation.y = effectController.giroMano * Math.PI / 180
-    dedos[0].position.y = 1 - effectController.aperturaPinza
-    dedos[1].position.y = -1 + effectController.aperturaPinza
-}
-
-function render() {
-    // Dibujar cada frame y lo muestra
-    requestAnimationFrame(render);// Llega el evento de dibujo en llamada recursiva
-    update();//Actualiza la escena
-    renderer.clear();
-
-    renderer.setViewport(0,0,
-        window.innerWidth,window.innerHeight);
-    renderer.render( scene, camera );
-
-    // Camara perspectiva
-    renderer.setViewport(0,0,
-        window.innerWidth/4,window.innerHeight/4);
-    renderer.render( scene, planta );
-}
-
-function setCameras(ar){
-    // Construir las cuatro camaras (Planta, Alzado, Perfil y Perspectiva)
-    let origen = new THREE.Vector3(0,0,0);
-
-    // Ortograficas
-    let camaraOrthographic;
-    if(ar > 1){
-        camaraOrthographic = new THREE.OrthographicCamera(l*ar, r*ar, t, b, -20, 20);
-    }
-    else{
-        camaraOrthographic = new THREE.OrthographicCamera(l, r, t/ar, b/ar, -20, 20);
-    }
-
-    alzado = camaraOrthographic.clone();
-    alzado.position.set(0,0,4);
-    alzado.lookAt(origen);
-    perfil = camaraOrthographic.clone();
-    perfil.position.set(4,0,0);
-    perfil.lookAt(origen);
-    planta = camaraOrthographic.clone();
-    planta.position.set(0,4,0);
-    planta.lookAt(origen);
-
-    // Perspectiva
-    let cameraPerspective = new THREE.PerspectiveCamera(40, ar, 0.1, 7000); // Inicializa camara (Angulo, razón de aspecto, Distancia con efecto, Distancia sin efecto)
-    cameraPerspective.position.set(500, 500, 500);
-    cameraPerspective.lookAt(new THREE.Vector3(0,0,0)); // A donde esta mirando la cámara
-
-    camera = cameraPerspective.clone();
-
-    /*scene.add(alzado);
-    scene.add(perfil);*/
-    scene.add(planta);
-    scene.add(camera);
 }
 
 function setupGUI() {
@@ -268,6 +199,80 @@ function setupGUI() {
             }
         })
     });
+}
+
+function render() {
+    // Dibujar cada frame y lo muestra
+    requestAnimationFrame(render);// Llega el evento de dibujo en llamada recursiva
+    update();//Actualiza la escena
+    renderer.clear();
+
+    renderer.setViewport(0,0,
+        window.innerWidth,window.innerHeight);
+    renderer.render( scene, camera );
+
+    // Camara perspectiva
+    renderer.setViewport(0,0,
+        window.innerWidth/4,window.innerHeight/4);
+    renderer.render( scene, planta );
+}
+
+function update() {
+    // Cambios entre frames
+    cameraController.update();
+    // Actualiza los FPS
+    stats.update();
+    base.rotation.y = effectController.giroBase * Math.PI / 180
+    brazo.rotation.z = effectController.giroBrazo * Math.PI / 180
+    antebrazo.rotation.y = effectController.giroAntebrazo * Math.PI / 180
+    antebrazo.rotation.z = effectController.giroRotula * Math.PI / 180
+    mano.rotation.y = effectController.giroMano * Math.PI / 180
+    dedos[0].position.y = 1 - effectController.aperturaPinza
+    dedos[1].position.y = -1 + effectController.aperturaPinza
+}
+
+function addStats(){
+    // STATS --> stats.update() en update()
+    stats = new Stats();
+    stats.setMode(0);// Muestra FPS
+    stats.domElement.style.cssText = 'position:absolute;bottom:0px;left:0px;';
+    document.getElementById('container').appendChild(stats.domElement);
+}
+
+function setCameras(ar){
+    // Construir las cuatro camaras (Planta, Alzado, Perfil y Perspectiva)
+    let origen = new THREE.Vector3(0,0,0);
+
+    // Ortograficas
+    let camaraOrthographic;
+    if(ar > 1){
+        camaraOrthographic = new THREE.OrthographicCamera(l*ar, r*ar, t, b, -20, 20);
+    }
+    else{
+        camaraOrthographic = new THREE.OrthographicCamera(l, r, t/ar, b/ar, -20, 20);
+    }
+
+    alzado = camaraOrthographic.clone();
+    alzado.position.set(0,0,4);
+    alzado.lookAt(origen);
+    perfil = camaraOrthographic.clone();
+    perfil.position.set(4,0,0);
+    perfil.lookAt(origen);
+    planta = camaraOrthographic.clone();
+    planta.position.set(0,4,0);
+    planta.lookAt(origen);
+
+    // Perspectiva
+    let cameraPerspective = new THREE.PerspectiveCamera(40, ar, 0.1, 7000); // Inicializa camara (Angulo, razón de aspecto, Distancia con efecto, Distancia sin efecto)
+    cameraPerspective.position.set(500, 500, 500);
+    cameraPerspective.lookAt(new THREE.Vector3(0,0,0)); // A donde esta mirando la cámara
+
+    camera = cameraPerspective.clone();
+
+    /*scene.add(alzado);
+    scene.add(perfil);*/
+    scene.add(planta);
+    scene.add(camera);
 }
 
 function updateAspectRatio() {
@@ -333,6 +338,10 @@ function generateMaterials() {
     });
     materiales[8] = new THREE.MeshBasicMaterial({
         color: new THREE.Color("rgb(255, 255, 255)"),
+        wireframe:true
+    });
+    materiales[9] = new THREE.MeshBasicMaterial({
+        color: new THREE.Color("rgb(255, 64, 101)"),
         wireframe:true
     });
 }
