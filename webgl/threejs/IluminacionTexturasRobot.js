@@ -12,13 +12,15 @@ let cameraController;
 let alzado, planta, perfil;
 // Global GUI
 let effectController;
+// Materiales y Texturas
+let materiales = []
 
 // Variables globales
 let suelo, robot, base;
 let brazo, eje, esparrago, rutula;
 let antebrazo, disco, nervios = [];
 let mano, dedos = [], pinzas = [];
-let x = [1, 1, -1, -1], z = [-1, 1, 1, -1], material = [], angulo = 0;
+let x = [1, 1, -1, -1], z = [-1, 1, 1, -1], angulo = 0;
 let l = b = -70;
 let r = t = -l;
 
@@ -79,7 +81,7 @@ function loadScene() {
     const geopinza = buildPinzas(ancho/2, alto/2, fondo/2, mueve);
 
     // Objetos
-    suelo = new THREE.Mesh(geosuelo, material[0]);
+    suelo = new THREE.Mesh(geosuelo, materiales[0]);
     suelo.rotation.x += Math.PI/2;
     suelo.rotation.z += Math.PI/4;
 
@@ -87,22 +89,22 @@ function loadScene() {
     robot = new THREE.Object3D();
 
     //Objeto base (Add: brazo)
-    base = new THREE.Mesh(geobase, material[1]);
+    base = new THREE.Mesh(geobase, materiales[1]);
     base.position.y += 7.5;
 
     //Objeto brazo (Add: eje + esparrago + rotula + antebrazo)
     brazo = new THREE.Object3D();
 
     //Objeto eje
-    eje = new THREE.Mesh(geoeje, material[2]);
+    eje = new THREE.Mesh(geoeje, materiales[2]);
     eje.rotation.x = Math.PI/2;
 
     //Objeto esparrago
-    esparrago = new THREE.Mesh(geoesparrago, material[3]);
+    esparrago = new THREE.Mesh(geoesparrago, materiales[3]);
     esparrago.position.y += 60;
 
     //Objeto rotula
-    rotula = new THREE.Mesh(georotula, material[4]);
+    rotula = new THREE.Mesh(georotula, materiales[4]);
     rotula.position.y += 120;
 
     //Objeto antebrazo (Add: disco + nervios + mano)
@@ -110,35 +112,35 @@ function loadScene() {
     antebrazo.position.y += 120;
 
     //Objeto disco
-    disco = new THREE.Mesh(geodisco, material[5]);
+    disco = new THREE.Mesh(geodisco, materiales[5]);
 
     //Objeto disco
     for (let i = 0; i < 4; i++) {
-        nervios[i] = new THREE.Mesh(geonervios, material[6]);
+        nervios[i] = new THREE.Mesh(geonervios, materiales[6]);
         nervios[i].position.y += 40;
         nervios[i].position.x += x[i] * (22/2.5 - 2);
         nervios[i].position.z += z[i] * (22/2.5 - 2);
     }
 
     //Objeto mano
-    mano = new THREE.Mesh(geomano, material[7]);
+    mano = new THREE.Mesh(geomano, materiales[7]);
     mano.position.y += 80;
     mano.rotation.x = Math.PI/2;
 
     //Objeto pinzas
-    dedos[0] = new THREE.Mesh(geopalma, material[8]);
+    dedos[0] = new THREE.Mesh(geopalma, materiales[8]);
     dedos[0].position.x += 20;
     dedos[0].position.y += 10;//Con respecto a mano
     dedos[0].rotation.x = Math.PI/2;
 
-    pinzas[0] = new THREE.Mesh(geopinza, material[1]);
+    pinzas[0] = new THREE.Mesh(geopinza, materiales[1]);
 
-    dedos[1] = new THREE.Mesh(geopalma, material[8]);
+    dedos[1] = new THREE.Mesh(geopalma, materiales[8]);
     dedos[1].position.x += 20;
     dedos[1].position.y += -10;//Con respecto a mano
     dedos[1].rotation.x = Math.PI/2;
 
-    pinzas[1] = new THREE.Mesh(geopinza, material[1]);
+    pinzas[1] = new THREE.Mesh(geopinza, materiales[1]);
     pinzas[1].rotation.x = Math.PI;
 
     //El grafo de escena es así:
@@ -297,39 +299,39 @@ function updateAspectRatio() {
 
 function generateMaterials() {
     // Materiales
-    material[0] = new THREE.MeshBasicMaterial({
+    materiales[0] = new THREE.MeshBasicMaterial({
         color: new THREE.Color("rgb(193, 51, 255)"),
         wireframe:true
     });
-    material[1] = new THREE.MeshBasicMaterial({
+    materiales[1] = new THREE.MeshBasicMaterial({
         color: new THREE.Color("rgb(255, 64, 0)"),
         wireframe:true
     });
-    material[2] = new THREE.MeshBasicMaterial({
+    materiales[2] = new THREE.MeshBasicMaterial({
         color: new THREE.Color("rgb(255, 191, 0)"),
         wireframe:true
     });
-    material[3] = new THREE.MeshBasicMaterial({
+    materiales[3] = new THREE.MeshBasicMaterial({
         color: new THREE.Color("rgb(64, 255, 0)"),
         wireframe:true
     });
-    material[4] = new THREE.MeshBasicMaterial({
+    materiales[4] = new THREE.MeshBasicMaterial({
         color: new THREE.Color("rgb(0, 128, 255)"),
         wireframe:true
     });
-    material[5] = new THREE.MeshBasicMaterial({
+    materiales[5] = new THREE.MeshBasicMaterial({
         color: new THREE.Color("rgb(255, 0, 191)"),
         wireframe:true
     });
-    material[6] = new THREE.MeshBasicMaterial({
+    materiales[6] = new THREE.MeshBasicMaterial({
         color: new THREE.Color("rgb(0, 255, 255)"),
         wireframe:true
     });
-    material[7] = new THREE.MeshBasicMaterial({
+    materiales[7] = new THREE.MeshBasicMaterial({
         color: new THREE.Color("rgb(255, 255, 0)"),
         wireframe:true
     });
-    material[8] = new THREE.MeshBasicMaterial({
+    materiales[8] = new THREE.MeshBasicMaterial({
         color: new THREE.Color("rgb(255, 255, 255)"),
         wireframe:true
     });
