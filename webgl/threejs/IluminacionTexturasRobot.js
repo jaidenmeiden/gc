@@ -189,7 +189,6 @@ function loadScene() {
     // Construir la escena
     scene.add(suelo);
     scene.add(robot);
-    scene.add( new THREE.AxisHelper(1000) ); // Ayudante de ejes para la escena
 }
 
 function setupGUI() {
@@ -349,19 +348,27 @@ function generateLights() {
     var luzAmbiente = new THREE.AmbientLight(0xFFFFFF, 0.5);
     scene.add(luzAmbiente);
 
-    /*var luzPuntual = new THREE.PointLight(0xFFFFFF, 0.7);
+    var luzPuntual = new THREE.PointLight(0xFFFFFF, 0.7);
     luzPuntual.position.set(-100, 200, -100);
     scene.add(luzPuntual);
 
     let luzDireccional = new THREE.DirectionalLight(0xFFFFFF, 0.3);
     luzDireccional.position.set(0, 40, -300);
-    scene.add(luzDireccional);*/
+    scene.add(luzDireccional);
 
     let luzFocal = new THREE.SpotLight(0xFFFFFF, 0.7);
-    luzFocal.position.set(300, 700, 0);
+    luzFocal.position.set(300, 573, 0);
     luzFocal.target.position.set(0, 0, 0);
-    luzFocal.angle = Math.PI / 10;
+    luzFocal.angle = Math.PI / 7;
     luzFocal.penumbra = 0.2;
+
+    luzFocal.shadow.camera.near = 100;
+    luzFocal.shadow.camera.far = 1700;
+    luzFocal.shadow.camera.fov = 7000;
+    luzFocal.shadow.mapSize.width = 10000;
+    luzFocal.shadow.mapSize.height = 10000;
+
+    scene.add(luzFocal.target);
     luzFocal.castShadow = true;
     scene.add(luzFocal);
 }
