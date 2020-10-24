@@ -39,11 +39,11 @@ function init() {
     //Tamaño dela area donde vamos a dibujar
     renderer.setSize(window.innerWidth,window.innerHeight);
     //Color con el que se formatea el contenedor
-    renderer.setClearColor(new THREE.Color(0x0000AA));
+    renderer.setClearColor(new THREE.Color(0xffffff));
     renderer.shadowMap.enabled = true;
-    renderer.autoClear = false; //Para que no borre cada vez que defino un ViewPort
     //Agregamos el elemento canvas de renderer al contenedor
     document.getElementById('container').appendChild(renderer.domElement);
+    renderer.autoClear = false; //Para que no borre cada vez que defino un ViewPort
 
     // Escena
     scene = new THREE.Scene();
@@ -56,10 +56,11 @@ function init() {
     cameraController = new THREE.OrbitControls( camera, renderer.domElement );
     cameraController.target.set(0,0,0);
 
-    addStats();
-
     // Captura de eventos
     window.addEventListener('resize', updateAspectRatio);
+
+    addStats();
+    generateLights();
 }
 
 function loadScene() {
@@ -82,6 +83,8 @@ function loadScene() {
     // Objetos
     suelo = new THREE.Mesh(geosuelo, materiales[0]);
     suelo.rotation.x += -1 * Math.PI/2;
+    suelo.position.y = -20;
+    suelo.receiveShadow = true;
 
     //Objeto robot (Add: base)
     robot = new THREE.Object3D();
@@ -89,6 +92,8 @@ function loadScene() {
     //Objeto base (Add: brazo)
     base = new THREE.Mesh(geobase, materiales[1]);
     base.position.y += 7.5;
+    base.receiveShadow = true;
+    base.castShadow = true;
 
     //Objeto brazo (Add: eje + esparrago + rotula + antebrazo)
     brazo = new THREE.Object3D();
@@ -96,14 +101,20 @@ function loadScene() {
     //Objeto eje
     eje = new THREE.Mesh(geoeje, materiales[2]);
     eje.rotation.x = Math.PI/2;
+    eje.receiveShadow = true;
+    eje.castShadow = true;
 
     //Objeto esparrago
     esparrago = new THREE.Mesh(geoesparrago, materiales[3]);
     esparrago.position.y += 60;
+    esparrago.receiveShadow = true;
+    esparrago.castShadow = true;
 
     //Objeto rotula
     rotula = new THREE.Mesh(georotula, materiales[4]);
     rotula.position.y += 120;
+    rotula.receiveShadow = true;
+    rotula.castShadow = true;
 
     //Objeto antebrazo (Add: disco + nervios + mano)
     antebrazo = new THREE.Object3D();
@@ -111,6 +122,8 @@ function loadScene() {
 
     //Objeto disco
     disco = new THREE.Mesh(geodisco, materiales[5]);
+    disco.receiveShadow = true;
+    disco.castShadow = true;
 
     //Objeto disco
     for (let i = 0; i < 4; i++) {
@@ -118,28 +131,40 @@ function loadScene() {
         nervios[i].position.y += 40;
         nervios[i].position.x += x[i] * (22/2.5 - 2);
         nervios[i].position.z += z[i] * (22/2.5 - 2);
+        nervios[i].receiveShadow = true;
+        nervios[i].castShadow = true;
     }
 
     //Objeto mano
     mano = new THREE.Mesh(geomano, materiales[7]);
     mano.position.y += 80;
     mano.rotation.x = Math.PI/2;
+    mano.receiveShadow = true;
+    mano.castShadow = true;
 
     //Objeto pinzas
     dedos[0] = new THREE.Mesh(geopalma, materiales[8]);
     dedos[0].position.x += 20;
     dedos[0].position.y += 10;//Con respecto a mano
     dedos[0].rotation.x = Math.PI/2;
+    dedos[0].receiveShadow = true;
+    dedos[0].castShadow = true;
 
     pinzas[0] = new THREE.Mesh(geopinza, materiales[9]);
+    pinzas[0].receiveShadow = true;
+    pinzas[0].castShadow = true;
 
     dedos[1] = new THREE.Mesh(geopalma, materiales[8]);
     dedos[1].position.x += 20;
     dedos[1].position.y += -10;//Con respecto a mano
     dedos[1].rotation.x = Math.PI/2;
+    dedos[1].receiveShadow = true;
+    dedos[1].castShadow = true;
 
     pinzas[1] = new THREE.Mesh(geopinza, materiales[9]);
     pinzas[1].rotation.x = Math.PI;
+    pinzas[1].receiveShadow = true;
+    pinzas[1].castShadow = true;
 
     //El grafo de escena es así:
     robot.add(base);
@@ -155,7 +180,6 @@ function loadScene() {
     mano.add(dedos[0]);
     dedos[1].add(pinzas[1]);
     mano.add(dedos[1]);
-    mano.add( new THREE.AxisHelper(1000) );
     antebrazo.add(mano);
     brazo.add(antebrazo);
 
@@ -163,7 +187,6 @@ function loadScene() {
     scene.add(suelo);
     scene.add(robot);
     scene.add( new THREE.AxisHelper(1000) ); // Ayudante de ejes para la escena
-
 }
 
 function setupGUI() {
@@ -180,7 +203,7 @@ function setupGUI() {
             angulo = 0
             location.reload();
         },
-        color: "rgb(255,0,0)"
+        color: new THREE.Color("rgb(183, 177, 165)")
     }
     let gui = new dat.GUI();
     let sub = gui.addFolder("Controles Robot")
@@ -223,13 +246,13 @@ function update() {
     cameraController.update();
     // Actualiza los FPS
     stats.update();
-    base.rotation.y = effectController.giroBase * Math.PI / 180
-    brazo.rotation.z = effectController.giroBrazo * Math.PI / 180
-    antebrazo.rotation.y = effectController.giroAntebrazo * Math.PI / 180
-    antebrazo.rotation.z = effectController.giroRotula * Math.PI / 180
-    mano.rotation.y = effectController.giroMano * Math.PI / 180
-    dedos[0].position.y = 1 - effectController.aperturaPinza
-    dedos[1].position.y = -1 + effectController.aperturaPinza
+    base.rotation.y = effectController.giroBase * Math.PI / 180;
+    brazo.rotation.z = effectController.giroBrazo * Math.PI / 180;
+    antebrazo.rotation.y = effectController.giroAntebrazo * Math.PI / 180;
+    antebrazo.rotation.z = effectController.giroRotula * Math.PI / 180;
+    mano.rotation.y = effectController.giroMano * Math.PI / 180;
+    dedos[0].position.y = 1 - effectController.aperturaPinza;
+    dedos[1].position.y = -1 + effectController.aperturaPinza;
 }
 
 function addStats(){
@@ -247,10 +270,10 @@ function setCameras(ar){
     // Ortograficas
     let camaraOrthographic;
     if(ar > 1){
-        camaraOrthographic = new THREE.OrthographicCamera(l*ar, r*ar, t, b, -20, 20);
+        camaraOrthographic = new THREE.OrthographicCamera(l*ar, r*ar, t, b, -1000, 1000);
     }
     else{
-        camaraOrthographic = new THREE.OrthographicCamera(l, r, t/ar, b/ar, -20, 20);
+        camaraOrthographic = new THREE.OrthographicCamera(l, r, t/ar, b/ar, -1000, 1000);
     }
 
     alzado = camaraOrthographic.clone();
@@ -260,7 +283,7 @@ function setCameras(ar){
     perfil.position.set(4,0,0);
     perfil.lookAt(origen);
     planta = camaraOrthographic.clone();
-    planta.position.set(0,4,0);
+    planta.position.set(0,300,0);
     planta.lookAt(origen);
 
     // Perspectiva
@@ -303,6 +326,27 @@ function updateAspectRatio() {
     camera.updateProjectionMatrix();
 }
 
+function generateLights() {
+    var luzAmbiente = new THREE.AmbientLight(0xFFFFFF, 0.5);
+    scene.add(luzAmbiente);
+
+    /*var luzPuntual = new THREE.PointLight(0xFFFFFF, 0.7);
+    luzPuntual.position.set(-100, 200, -100);
+    scene.add(luzPuntual);
+
+    let luzDireccional = new THREE.DirectionalLight(0xFFFFFF, 0.3);
+    luzDireccional.position.set(0, 40, -300);
+    scene.add(luzDireccional);*/
+
+    let luzFocal = new THREE.SpotLight(0xFFFFFF, 0.7);
+    luzFocal.position.set(300, 700, 0);
+    luzFocal.target.position.set(0, 0, 0);
+    luzFocal.angle = Math.PI / 10;
+    luzFocal.penumbra = 0.2;
+    luzFocal.castShadow = true;
+    scene.add(luzFocal);
+}
+
 function generateTextures() {
     // Materiales
     let textureLoader = new THREE.TextureLoader()
@@ -326,21 +370,20 @@ function generateTextures() {
 
 function generateMaterials() {
     // Materiales
-    materiales[0] = new THREE.MeshBasicMaterial({
+    materiales[0] = new THREE.MeshLambertMaterial({
         color: new THREE.Color("rgb(183, 177, 165)"),
         map: textures[0]
     });
-    materiales[1] = new THREE.MeshBasicMaterial({
+    materiales[1] = new THREE.MeshLambertMaterial({
         color: new THREE.Color("rgb(122, 49, 19)"),
         map: textures[1]
     });
-    materiales[2] = new THREE.MeshBasicMaterial({
+    materiales[2] = new THREE.MeshLambertMaterial({
         color: new THREE.Color("rgb(220, 172, 74)"),
         map: textures[2]
     });
     materiales[3] = new THREE.MeshLambertMaterial({
         color: new THREE.Color("rgb(220, 172, 74)"),
-        wireframe: false,
         map: textures[3]
     });
     materiales[4] = new THREE.MeshPhongMaterial({

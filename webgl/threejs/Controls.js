@@ -203,10 +203,10 @@ function setCameras(ar){
     // Ortograficas
     let camaraOrthographic;
     if(ar > 1){
-        camaraOrthographic = new THREE.OrthographicCamera(l*ar, r*ar, t, b, -20, 20);
+        camaraOrthographic = new THREE.OrthographicCamera(l*ar, r*ar, t, b, -1000, 1000);
     }
     else{
-        camaraOrthographic = new THREE.OrthographicCamera(l, r, t/ar, b/ar, -20, 20);
+        camaraOrthographic = new THREE.OrthographicCamera(l, r, t/ar, b/ar, -1000, 1000);
     }
 
     alzado = camaraOrthographic.clone();
@@ -216,7 +216,7 @@ function setCameras(ar){
     perfil.position.set(4,0,0);
     perfil.lookAt(origen);
     planta = camaraOrthographic.clone();
-    planta.position.set(0,4,0);
+    planta.position.set(0,300,0);
     planta.lookAt(origen);
 
     // Perspectiva
