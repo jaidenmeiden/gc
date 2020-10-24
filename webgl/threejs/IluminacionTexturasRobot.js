@@ -166,6 +166,9 @@ function loadScene() {
     pinzas[1].receiveShadow = true;
     pinzas[1].castShadow = true;
 
+    //Add room
+    addRoom();
+
     //El grafo de escena es así:
     robot.add(base);
     base.add(brazo);
@@ -253,6 +256,22 @@ function update() {
     mano.rotation.y = effectController.giroMano * Math.PI / 180;
     dedos[0].position.y = 1 - effectController.aperturaPinza;
     dedos[1].position.y = -1 + effectController.aperturaPinza;
+}
+
+function addRoom() {
+    let shader = THREE.ShaderLib.cube;
+    shader.uniforms.tCube.value = materiales[4];
+
+    let matparedes = new THREE.ShaderMaterial({
+        fragmentShader: shader.fragmentShader,
+        vertexShader: shader.vertexShader,
+        uniforms: shader.uniforms,
+        dephtWrite: false,
+        side: THREE.BackSide
+    });
+
+    let habitacion = new THREE.Mesh(new THREE.BoxGeometry(1000, 1000, 1000), matparedes);
+    scene.add(habitacion);
 }
 
 function addStats(){
