@@ -39,7 +39,7 @@ function init() {
     //Tamaño dela area donde vamos a dibujar
     renderer.setSize(window.innerWidth,window.innerHeight);
     //Color con el que se formatea el contenedor
-    renderer.setClearColor(new THREE.Color(0xffffff));
+    renderer.setClearColor(new THREE.Color(0x6b8bba));
     renderer.shadowMap.enabled = true;
     //Agregamos el elemento canvas de renderer al contenedor
     document.getElementById('container').appendChild(renderer.domElement);
@@ -83,7 +83,7 @@ function loadScene() {
     // Objetos
     suelo = new THREE.Mesh(geosuelo, materiales[0]);
     suelo.rotation.x += -1 * Math.PI/2;
-    suelo.position.y = -20;
+    //suelo.position.y = -20;
     suelo.receiveShadow = true;
 
     //Objeto robot (Add: base)
@@ -259,9 +259,9 @@ function update() {
 
 function addRoom() {
     let shader = THREE.ShaderLib.cube;
-    shader.uniforms.tCube.value = materiales[4];
+    shader.uniforms.tCube.value = textures[4];
 
-    let matparedes = new THREE.ShaderMaterial({
+    let shaderMaterial = new THREE.ShaderMaterial({
         fragmentShader: shader.fragmentShader,
         vertexShader: shader.vertexShader,
         uniforms: shader.uniforms,
@@ -269,8 +269,9 @@ function addRoom() {
         side: THREE.BackSide
     });
 
-    let habitacion = new THREE.Mesh(new THREE.BoxGeometry(1000, 1000, 1000), matparedes);
-    scene.add(habitacion);
+    let room = new THREE.Mesh(new THREE.BoxGeometry(1000, 1000, 1000), shaderMaterial);
+    room.position.y += 500;
+    scene.add(room);
 }
 
 function addStats(){
@@ -345,10 +346,10 @@ function updateAspectRatio() {
 }
 
 function generateLights() {
-    var luzAmbiente = new THREE.AmbientLight(0xFFFFFF, 0.5);
+    let luzAmbiente = new THREE.AmbientLight(0xFFFFFF, 0.5);
     scene.add(luzAmbiente);
 
-    var luzPuntual = new THREE.PointLight(0xFFFFFF, 0.7);
+    let luzPuntual = new THREE.PointLight(0xFFFFFF, 0.7);
     luzPuntual.position.set(-100, 200, -100);
     scene.add(luzPuntual);
 
