@@ -7,23 +7,19 @@
     <title>Proyecto - GPC</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:600,700,900' rel='stylesheet' type='text/css'>
-
-    <!-- Booooooootstrap -->
+    <!-- Botstrap -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
-
-
     <!-- Styles -->
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-
+    <link rel="stylesheet" type="text/css" href="css/proyecto.css">
+    <script src="js/relax.js"></script>
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <script>window.html5 || document.write('<script src="js/vendor/html5shiv.js"><\/script>')</script>
     <![endif]-->
 </head>
 
-<body>
+<body id="cuerpo">
 <div class="grid">
     <div class="container">
         <div class="row">
@@ -55,8 +51,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-offset-1 col-md-11">
-                    <a href="http://dixonandmoe.com/">
-                        <h2>BY DIXON & MOE <span>➔</span></h2>
+                    <a href="#GettingStarted">
+                        <h2>Proyecto de Jaiden Riaño <span>➔</span></h2>
                     </a>
                     <div class="white-block"></div>
                 </div>
@@ -64,23 +60,26 @@
             <div class="title">
                 <div class="row">
                     <div class="col-md-offset-1 col-md-6">
-                        <h1>RELLAX<span>JS</span></h1>
+                        <h1>IA<span>Solo es el comienzo!</span></h1>
                     </div>
                     <div class="col-md-4 text-right">
-                        <a href="https://github.com/dixonandmoe/rellax">GITHUB</a>
+                        <a href="#GettingStarted">INICIA</a>
                     </div>
                 </div>
             </div>
             <div class="subtitle">
                 <div class="row">
                     <div class="col-md-offset-1 col-md-2">
-                        <h3>Light (871b gz)</h3>
+                        <h3>Gráficos por Computador</h3>
                     </div>
                     <div class="col-md-2">
-                        <h3>Vanilla Javascript</h3>
+                        <h3>Ligüística Computacional</h3>
                     </div>
                     <div class="col-md-2">
-                        <h3>Parallax Library</h3>
+                        <h3>Técnicas de Inteligencia Artificial</h3>
+                    </div>
+                    <div class="col-md-2">
+                        <h3>Reconocimiento de Formas y Aprendizaje Computacional</h3>
                     </div>
                 </div>
             </div>
@@ -88,14 +87,14 @@
     </header>
 
 
-    <section class="section san-francisco">
+    <section class="section valencia">
         <div class="absolute">
             <div class="container">
                 <div class="row">
                     <div class="col-md-offset-1 col-md-11">
                         <h2 class="rellax" data-rellax-speed="-3" data-rellax-xs-speed="-5" data-rellax-mobile-speed="4"
                             data-rellax-tablet-speed="-3">
-                            San Francisco<br>California
+                            Valencia<br>España
                         </h2>
                     </div>
                 </div>
@@ -146,14 +145,14 @@
             <div class="row">
                 <div class="col-md-offset-1 col-md-5">
                     <div class="date">
-                        Incorporated—<br>
-                        1850<br><br>
-                        37°47′N 122°25′W
+                        Inteligencia Artificial,<br>
+                        Reconocimiento de Formas<br>
+                        e Imagen Digital<br>
                     </div>
                 </div>
                 <div class="col-md-offset-1 col-md-4">
                     <div class="temp">
-                        68°
+                        2020/2021
                     </div>
                 </div>
             </div>
@@ -163,94 +162,122 @@
     </section>
 
     <section class="documentation">
-        <div class="container">
+        <div class="contenedor">
             <section class="row">
-                <div class="col-md-4 sticky">
-                    <div class="options" id="optnCard">
-
-                        <p class="options-text disabled">Options</p>
-                        <a href="#GettingStarted" class="option options-title active">Getting Started!</a>
-                        <a class="option options-title" href="#Speed">Speed</a>
-                        <a class="option options-title" href="#Centering">Centering</a>
-                        <a class="option options-title" href="#ZIndex">Z-Index</a>
-                        <a class="option options-title" href="#HorParlx">Horizontal Scrolling</a>
-                        <!-- <span>➔</span> -->
-                        <a class="option options-title" href="#CustomWrapper">Custom Wrapper</a>
-                        <a class="option options-title" href="#TargetNode">Target Node</a>
-                        <p class="options-text options-text--margin">Methods</p>
-                        <a class="option options-title" href="#Refresh">Refresh</a>
-                        <a class="option options-title" href="#Destroy">Destroy</a>
-
+                <div class="col-md-5 sticky">
+                    <div class="options" id="avance">
                     </div>
                 </div>
 
-                <div class="col-md-8">
-                    <!-- Getting Started -->
+                <div class="col-md-5">
+                    <!-- Empezando -->
                     <section class="section" id="GettingStarted">
                         <div style="margin-top: 6rem">
-
-                            <div>
+                            <div id="sect1a">
                                 <!-- sect1 -->
-                                <h2 class="heading">Getting Started!</h2>
+                                <h2 class="heading">Empezando!</h2>
+                                <p style="font-weight: lighter;">
+                                    Lo primero es agregar al <kbd>canvas</kbd> cada uno de los objetos!
+                                </p>
+                                <p style="font-weight: lighter;">
+                                    Para cada objeto generamos la geometría, creamos el objeto <kbd>Mesh</kbd>(Malla poligonal triangular) con la geometría y un material previamente seleccionado, ubicándolo en una posición especifica
+                                </p>
                                 <div class="text-editor">
                                     <code>
-                                        <span class="orange">npm install rellax --save</span>
+                                        <span class="purple">const</span> geocuello = <span class="green">new</span> <span class="white">THREE.CylinderGeometry</span>(10, 10, <span class="white">"Altura"</span>, <span class="white">"Segmentos"</span>);<br/>
+                                        <span class="purple">let</span> cuello = <span class="green">new</span> <span class="white">THREE.Mesh</span>(geocuello, <span class="white">"Material configurado"</span>);<br/>
+                                        <span class="white">cuello.position.set</span>(0,<span class="white">"posición en eje Y"</span>,0);<br/>
+                                        <span class="white">cabeza.add</span>(cuello);
                                     </code>
                                 </div>
                                 <p style="font-weight: lighter;">
-                                    or if you're old school like us, download and insert
-                                    <kbd>rellax.min.js</kbd> file in your project folder.
+                                    Cuello del robot.
                                 </p>
                             </div>
-
-                            <div>
-                                <!-- sect2 -->
-                                <h3 class="heading">JavaScript (`accepts any class name`)</h3>
+                            <div id="sect1b">
+                                <!-- sect1 -->
                                 <div class="text-editor">
                                     <code>
-                                        <span class="purple">var</span> rellax = <span class="green">new</span> <span class="white">Rellax</span>('.rellax');
+                                        <span class="purple">const</span> geomenton = <span class="green">new</span> <span class="white">THREE.CylinderGeometry</span>(10, 10, <span class="white">"Altura"</span>, <span class="white">"Segmentos"</span>);<br/>
+                                        <span class="purple">let</span> menton = <span class="green">new</span> <span class="white">THREE.Mesh</span>(geomenton, <span class="white">"Material configurado"</span>);<br/>
+                                        <span class="white">menton.position.set</span>(0,<span class="white">"posición en eje Y"</span>,0);<br/>
+                                        <span class="white">cabeza.add</span>(menton);
                                     </code>
                                 </div>
+                                <p style="font-weight: lighter;">
+                                    Mentón del robot.
+                                </p>
                             </div>
-
-                            <div>
-                                <!-- sect3 -->
-                                <h3 class="heading">Basic Markup (Default Speed: -2)</h3>
+                            <div id="sect1c">
+                                <!-- sect1 -->
                                 <div class="text-editor">
                                     <code>
-                                        &lt;div <span class="purple">class</span>="<span class="green">rellax</span>"&gt;<br>
-                                        <span class="white">&nbsp;&nbsp;I’m slow and smooth</span><br>
-                                        &lt;/div&gt;
+                                        <span class="purple">const</span> geoboca = <span class="green">new</span> <span class="white">THREE.CylinderGeometry</span>(10, 10, <span class="white">"Altura"</span>, <span class="white">"Segmentos"</span>);<br/>
+                                        <span class="purple">let</span> boca = <span class="green">new</span> <span class="white">THREE.Mesh</span>(geoboca, <span class="white">"Material configurado"</span>);<br/>
+                                        <span class="white">boca.position.set</span>(0,<span class="white">"posición en eje Y"</span>,0);<br/>
+                                        <span class="white">cabeza.add</span>(boca);
                                     </code>
                                 </div>
+                                <p style="font-weight: lighter;">
+                                    Boca del robot.
+                                </p>
                             </div>
-
-
-                            <div>
-                                <!-- sect4 -->
-                                <h3 class="heading">Optional Speed (-10 to +10)</h3>
+                            <div id="sect1d">
+                                <!-- sect1 -->
                                 <div class="text-editor">
                                     <code>
-                                        &lt;div <span class="purple">class</span>="<span class="green">rellax</span>" <span class="purple">data-rellax-speed</span>="<span class="green">-3</span>"&gt;<br>
-                                        <span class="white">&nbsp;&nbsp;I’m slow and smooth</span><br>
-                                        &lt;/div&gt;
-                                        <br />
-                                        <br>
-                                        &lt;div <span class="purple">class</span>="<span class="green">rellax</span>" <span class="purple">data-rellax-speed</span>="<span class="green">7</span>"&gt;<br>
-                                        <span class="white">&nbsp;&nbsp;I’m super fast!!</span><br>
-                                        &lt;/div&gt;
-                                        <br />
-                                        <br>
-                                        &lt;div <span class="purple">class</span>="<span class="green">rellax</span>" <span class="purple">data-rellax-speed</span>="<span class="green">-5</span>"&gt;<br>
-                                        <span class="white">&nbsp;&nbsp;I’m extra slow and smooth</span><br>
-                                        &lt;/div&gt;
-                                        <br />
+                                        <span class="purple">const</span> georostro = <span class="green">new</span> <span class="white">THREE.CylinderGeometry</span>(10, 10, <span class="white">"Altura"</span>, <span class="white">"Segmentos"</span>);<br/>
+                                        <span class="purple">let</span> rostro = <span class="green">new</span> <span class="white">THREE.Mesh</span>(georostro, <span class="white">"Material configurado"</span>);<br/>
+                                        <span class="white">rostro.position.set</span>(0,<span class="white">"posición en eje Y"</span>,0);<br/>
+                                        <span class="white">cabeza.add</span>(rostro);
                                     </code>
                                 </div>
-
+                                <p style="font-weight: lighter;">
+                                    Rostro del robot.
+                                </p>
                             </div>
-
-
+                            <div id="sect1e">
+                                <!-- sect1 -->
+                                <div class="text-editor">
+                                    <code>
+                                        <span class="purple">const</span> geonasal = <span class="green">new</span> <span class="white">THREE.CylinderGeometry</span>(10, 10, <span class="white">"Altura"</span>, <span class="white">"Segmentos"</span>);<br/>
+                                        <span class="purple">let</span> nasal = <span class="green">new</span> <span class="white">THREE.Mesh</span>(geonasal, <span class="white">"Material configurado"</span>);<br/>
+                                        <span class="white">nasal.position.set</span>(0,<span class="white">"posición en eje Y"</span>,0);<br/>
+                                        <span class="white">cabeza.add</span>(nasal);
+                                    </code>
+                                </div>
+                                <p style="font-weight: lighter;">
+                                    Sección nasal del robot.
+                                </p>
+                            </div>
+                            <div id="sect1f">
+                                <!-- sect1 -->
+                                <div class="text-editor">
+                                    <code>
+                                        <span class="purple">const</span> geofrontal = <span class="green">new</span> <span class="white">THREE.CylinderGeometry</span>(10, 10, <span class="white">"Altura"</span>, <span class="white">"Segmentos"</span>);<br/>
+                                        <span class="purple">let</span> frontal = <span class="green">new</span> <span class="white">THREE.Mesh</span>(geofrontal, <span class="white">"Material configurado"</span>);<br/>
+                                        <span class="white">frontal.position.set</span>(0,<span class="white">"posición en eje Y"</span>,0);<br/>
+                                        <span class="white">cabeza.add</span>(frontal);
+                                    </code>
+                                </div>
+                                <p style="font-weight: lighter;">
+                                    Sección frontal del robot.
+                                </p>
+                            </div>
+                            <div id="sect1g">
+                                <!-- sect1 -->
+                                <div class="text-editor">
+                                    <code>
+                                        <span class="purple">const</span> geoparetal = <span class="green">new</span> <span class="white">THREE.CylinderGeometry</span>(10, 10, <span class="white">"Altura"</span>, <span class="white">"Segmentos"</span>);<br/>
+                                        <span class="purple">let</span> paretal = <span class="green">new</span> <span class="white">THREE.Mesh</span>(geoparetal, <span class="white">"Material configurado"</span>);<br/>
+                                        <span class="white">paretal.position.set</span>(0,<span class="white">"posición en eje Y"</span>,0);<br/>
+                                        <span class="white">cabeza.add</span>(paretal);
+                                    </code>
+                                </div>
+                                <p style="font-weight: lighter;">
+                                    Sección paretal del robot.
+                                </p>
+                            </div>
                         </div>
                     </section>
 
@@ -549,6 +576,25 @@
                     </section>
 
                 </div>
+
+                <div class="col-md-2 sticky">
+                    <div class="options" id="optnCard">
+
+                        <p class="options-text disabled">Progreso!</p>
+                        <a href="#GettingStarted" class="option options-title active">Empezando!</a>
+                        <a class="option options-title" href="#Speed">Speed</a>
+                        <a class="option options-title" href="#Centering">Centering</a>
+                        <a class="option options-title" href="#ZIndex">Z-Index</a>
+                        <a class="option options-title" href="#HorParlx">Horizontal Scrolling</a>
+                        <!-- <span>➔</span> -->
+                        <a class="option options-title" href="#CustomWrapper">Custom Wrapper</a>
+                        <a class="option options-title" href="#TargetNode">Target Node</a>
+                        <p class="options-text options-text--margin">Methods</p>
+                        <a class="option options-title" href="#Refresh">Refresh</a>
+                        <a class="option options-title" href="#Destroy">Destroy</a>
+
+                    </div>
+                </div>
             </section>
         </div>
     </section>
@@ -572,20 +618,6 @@
 
 </main>
 
-
-<!-- javascript -->
-<script type="text/javascript" src="rellax.js"></script>
-<script type="text/javascript" src="option.js"></script>
-<script>
-    var rellax = new Rellax('.rellax', {
-        // center: true
-        callback: function (position) {
-            // callback every position change
-            console.log(position);
-        },
-        breakpoints: [576, 768, 1024]
-    });
-</script>
 <!--Bliblitecas-->
 <script src="lib/three.min_r96.js"></script>
 <script src="lib/OrbitControls.js"></script>
@@ -595,6 +627,7 @@
 <script src="lib/Coordinates.js"></script><!-- Pinta las mallas de las cordenadas -->
 <script src="lib/cannon_062.js"></script><!-- The rigid body physics engine includes simple collision detection, various body shapes, contacts, friction and constraints. -->
 
+<script src="threejs/proyecto.js"></script>
 
 </body>
 
