@@ -193,6 +193,23 @@ function setCameras(ar){
     scene.add(camera);
 }
 
+function addRoom() {
+    let shader = THREE.ShaderLib.cube;
+    shader.uniforms.tCube.value = textures[2];
+
+    let shaderMaterial = new THREE.ShaderMaterial({
+        fragmentShader: shader.fragmentShader,
+        vertexShader: shader.vertexShader,
+        uniforms: shader.uniforms,
+        dephtWrite: false,
+        side: THREE.BackSide
+    });
+
+    room = new THREE.Mesh(new THREE.BoxGeometry(1000, 1000, 1000), shaderMaterial);
+    room.position.y += 500;
+    scene.add(room);
+}
+
 function generateTextures() {
     // Materiales
     let textureLoader = new THREE.TextureLoader()
@@ -202,12 +219,12 @@ function generateTextures() {
     textures[0].repeat.set(4, 3);
     textures[0].wrapS = textures[0].wrapT = THREE.MirroredRepeatWrapping;
     textures[1] = textureLoader.load(path + 'oxidado.jpg');
+    textures[2] = textureLoader.load(path + 'gold.jpg');
     let walls = [path + 'Yokohama/posx.jpg', path + 'Yokohama/negx.jpg',
         path + 'Yokohama/posy.jpg', path + 'Yokohama/negy.jpg',
         path + 'Yokohama/posz.jpg', path + 'Yokohama/negz.jpg'
     ];
-    textures[2] = new THREE.CubeTextureLoader().load(walls);
-    textures[3] = textureLoader.load(path + 'gold.jpg');
+    textures[3] = new THREE.CubeTextureLoader().load(walls);
 }
 
 function generateMaterials() {
@@ -265,7 +282,7 @@ function rebuildMaterials() {
     });
     materiales[2] = new THREE.MeshLambertMaterial({
         color: new THREE.Color("rgb(220, 172, 74)"),
-        map: textures[3]
+        map: textures[2]
     });
     materiales[3] = new THREE.MeshPhongMaterial({
         color: new THREE.Color("rgb(122, 49, 19)"),
@@ -276,7 +293,7 @@ function rebuildMaterials() {
     });
     materiales[4] = new THREE.MeshLambertMaterial({
         color: new THREE.Color("rgb(220, 172, 74)"),
-        map: textures[3]
+        map: textures[2]
     });
     materiales[5] = new THREE.MeshPhongMaterial({
         color: new THREE.Color("rgb(122, 49, 19)"),
