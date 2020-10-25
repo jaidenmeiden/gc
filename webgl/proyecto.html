@@ -173,15 +173,81 @@
                     <!-- Empezando -->
                     <section class="section" id="GettingStarted">
                         <div style="margin-top: 6rem">
-                            <div id="sect1a">
+                            <div>
                                 <!-- sect1 -->
                                 <h2 class="heading">Empezando!</h2>
                                 <p style="font-weight: lighter;">
-                                    Lo primero es agregar al <kbd>canvas</kbd> cada uno de los objetos!
+                                    Lo primero es instanciar el proyecto para que podamos trabajar sobre el lienzo <kbd>canvas</kbd>
+                                </p>
+                                <div class="text-editor">
+                                    <code>
+                                        <span class="purple">const</span> renderer = <span class="green">new</span> <span class="white">THREE.WebGLRenderer</span>();<br/>
+                                        renderer<span class="white">.setSize</span>(<span class="purple">ancho, alto</span>);<br/>
+                                        renderer<span class="white">.setClearColor</span>(<span class="green">new</span> <span class="white">THREE.Color</span>(<span class="purple">0x363635</span>));<br/>
+                                        renderer<span class="white">.shadowMap</span>.enabled = <span class="purple">true</span>;<br/>
+                                        document<span class="white">.getElementById</span>(<span class="green">'avance'</span>)<span class="white">.appendChild</span>(renderer<span class="purple">.domElement</span>);<br/><br/>
+
+                                        <span class="purple">const</span> scene = <span class="green">new</span> <span class="white">THREE.SceneTHREE</span>.Color();
+                                    </code>
+                                </div>
+                                <p style="font-weight: lighter;">
+                                    Controlador de camara
+                                </p>
+                                <div class="text-editor">
+                                    <code>
+                                        cameraController = <span class="green">new</span> <span class="white">THREE.OrbitControls</span>(<span class="purple">camera</span>, renderer<span class="white">.domElement</span>);<br/>
+                                        cameraController<span class="white">.target</span>.set(<span class="purple">0,0,0</span>);
+                                    </code>
+                                </div>
+                                <p style="font-weight: lighter;">
+                                    Captura de eventos
+                                </p>
+                                <div class="text-editor">
+                                    <code>
+                                        window<span class="white">.addEventListener</span>(<span class="green">'resize'</span>, <span class="white">updateAspectRatio</span>(<span class="purple">ar</span>));<br/>
+                                    </code>
+                                </div>
+                                <p style="font-weight: lighter;">
+                                    Se le indica al motor las nuevas dimensiones del <kbd>canvas</kbd> y se renueva
+                                    la relación de aspecto de la camara al ajustar el tamaño del <kbd>canvas</kbd>
+                                </p>
+                                <div class="text-editor">
+                                    <code>
+                                        <span class="green">function</span> <span class="white">updateAspectRatio</span>(<span class="purple">ar</span>) {<br/>
+                                        &nbsp;&nbsp;renderer.setSize(<span class="purple">ancho, alto</span>);<br/>
+                                        &nbsp;&nbsp;camera.aspect = <span class="purple">ar</span>;<br/>
+                                        &nbsp;&nbsp;camera<span class="white">.updateProjectionMatrix()</span>;<br/>
+                                        }
+                                    </code>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="section" id="Objetos">
+                        <div style="margin-top: 6rem">
+                            <div>
+                                <h2 class="heading">Objetos!</h2>
+                                <p style="font-weight: lighter;">
+                                    Agregamos todos los objetos al <kbd>canvas</kbd> de manera individual
                                 </p>
                                 <p style="font-weight: lighter;">
                                     Para cada objeto generamos la geometría, creamos el objeto <kbd>Mesh</kbd>(Malla poligonal triangular) con la geometría y un material previamente seleccionado, ubicándolo en una posición especifica
                                 </p>
+                                <div class="text-editor">
+                                    <code>
+                                        <span class="purple">const</span> geosuelo = <span class="green">new</span> <span class="white">THREE.PlaneGeometry</span>(500, 500, 50, 50);<br/>
+                                        <span class="purple">let</span> suelo = <span class="green">new</span> <span class="white">THREE.Mesh</span>(geosuelo, <span class="white">"Material configurado"</span>);<br/>
+                                        <span class="white">suelo.position.set</span>(0,0,0);<br/>
+                                        <span class="purple">suelo.rotation.x +=</span> -1 * Math.PI/2;<br/><br/>
+                                        <span class="purple">let</span> cabeza = <span class="green">new</span> <span class="white">THREE.Object3D();</span>
+                                    </code>
+                                </div>
+                                <p style="font-weight: lighter;">
+                                    Objeto suelo.
+                                </p>
+                            </div>
+                            <div>
+                                <!-- sect1 -->
                                 <div class="text-editor">
                                     <code>
                                         <span class="purple">const</span> geocuello = <span class="green">new</span> <span class="white">THREE.CylinderGeometry</span>(10, 10, <span class="white">"Altura"</span>, <span class="white">"Segmentos"</span>);<br/>
@@ -194,7 +260,7 @@
                                     Cuello del robot.
                                 </p>
                             </div>
-                            <div id="sect1b">
+                            <div>
                                 <!-- sect1 -->
                                 <div class="text-editor">
                                     <code>
@@ -208,7 +274,7 @@
                                     Mentón del robot.
                                 </p>
                             </div>
-                            <div id="sect1c">
+                            <div>
                                 <!-- sect1 -->
                                 <div class="text-editor">
                                     <code>
@@ -222,7 +288,7 @@
                                     Boca del robot.
                                 </p>
                             </div>
-                            <div id="sect1d">
+                            <div>
                                 <!-- sect1 -->
                                 <div class="text-editor">
                                     <code>
@@ -236,7 +302,7 @@
                                     Rostro del robot.
                                 </p>
                             </div>
-                            <div id="sect1e">
+                            <div>
                                 <!-- sect1 -->
                                 <div class="text-editor">
                                     <code>
@@ -250,7 +316,7 @@
                                     Sección nasal del robot.
                                 </p>
                             </div>
-                            <div id="sect1f">
+                            <div>
                                 <!-- sect1 -->
                                 <div class="text-editor">
                                     <code>
@@ -264,7 +330,7 @@
                                     Sección frontal del robot.
                                 </p>
                             </div>
-                            <div id="sect1g">
+                            <div>
                                 <!-- sect1 -->
                                 <div class="text-editor">
                                     <code>
@@ -281,296 +347,367 @@
                         </div>
                     </section>
 
-                    <!-- Speed -->
-                    <section class="section" id="Speed">
+                    <!-- Texturas -->
+                    <section class="section" id="Texturas">
                         <div style="margin-top: 6rem">
 
                             <!-- sect1 -->
-                            <h2 class="heading">Speed</h2>
+                            <h2 class="heading">Texturas</h2>
                             <p style="font-weight: lighter;">
-                                Use the <kbd>data-rellax-speed</kbd> attribute to set the speed of a
-                                <kbd>.rellax</kbd> element to something other than the default value
-                                (which is <kbd>-2</kbd>). A negative value will make it move slower
-                                than regular scrolling, and a positive value will make it move faster.
-                                We recommend keeping the speed between <kbd>-10 and +10</kbd>.
+                                Después de haber puesto los objetos en el <kbd>canvas</kbd> el siguiente paso es aplicar texturas a ca uno de estos objetos.
                             </p>
-
-
-
                             <div>
                                 <!-- sect2 -->
-                                <h3 class="heading">Responsive Speed</h3 style="margin-top: 4rem">
+                                <h3 class="heading">Construir texturas</h3>
                                 <p style="font-weight: lighter;">
-                                    Use responsive speed attributes for breakpoint levels that require a
-                                    different speed. Defaults to the <kbd>data-rellax-speed</kbd> setting
-                                    in unspecified breakpoints.
+                                    Construimos las texturas que vamos a utilizar en el proyecto, para este caso especifico vamos a construir una textura para el suelo, y tres texturas más para aplicar en la cabeza del robot utlizando <kbd>TextureLoader</kbd>
                                 </p>
 
                                 <div class="text-editor">
                                     <code>
-                                        &lt;div
-                                        <br>&nbsp;&nbsp;<span class="purple">class</span>="<span class="green">rellax</span>"
-                                        <br>&nbsp;&nbsp;<span class="purple">data-rellax-speed</span>="<span class="green">7</span>"
-                                        <br>&nbsp;&nbsp;<span class="purple">data-rellax-xs-speed</span>="<span class="green">-5</span>"
-                                        <br>&nbsp;&nbsp;<span class="purple">data-rellax-mobile-speed</span>="<span class="green">3</span>"
-                                        <br>&nbsp;&nbsp;<span class="purple">data-rellax-tablet-speed</span>="<span class="green">-8</span>"
-                                        <br>&nbsp;&nbsp;<span class="purple">data-rellax-desktop-speed</span>="<span class="green">1</span>"&gt;<br>
-                                        <span class="white">&nbsp;&nbsp;&nbsp;&nbsp;I parallax at all different speeds depending on your screen width.</span><br>
-                                        &lt;/div&gt;
+                                        <span class="purple">let</span> let path <span class="green">=</span> <span class="white">'images/';</span><br/><br/>
+                                        <span class="purple">let</span> textureLoader = <span class="green">new</span> <span class="white">THREE.TextureLoader();</span><br/><br/>
+                                        <span class="purple">let</span> texturaA <span class="green">=</span> <span class="white">textureLoader.</span>load(path + <span class="green">'floor.jpg'</span>);<br/>
+                                        <span class="white">texturaA.</span>magFilter <span class="green">=</span> <span class="white">THREE.</span>LinearFilter;<br/>
+                                        <span class="white">texturaA.</span>minFilter <span class="green">=</span> <span class="white">THREE.</span>LinearFilter;<br/>
+                                        <span class="white">texturaA.</span>repeat.<span class="green">set(4, 3);</span><br/>
+                                        <span class="white">texturaA.</span>wrapS <span class="green">=</span> <span class="white">texturaA.</span>wrapT <span class="green">=</span> <span class="white">THREE.</span>MirroredRepeatWrapping;<br/>
                                     </code>
                                 </div>
-
                                 <p style="font-weight: lighter;">
-                                    Pass an array of breakpoints. Each breakpoint value represents the
-                                    resolution for mobile, tablet, desktop respectively. Checkout the
-                                    responsiveness of the demo.
+                                    Textura del piso
                                 </p>
                                 <div class="text-editor">
                                     <code>
-                                        &lt;script&gt;
-                                        <br>&nbsp;&nbsp;<span class="comment">//default JS Setting</span>
-                                        <br>&nbsp;&nbsp;<span class="purple">var</span> rellax = <span class="green">new</span> <span class="white">Rellax</span>('.rellax',
-                                        <span class="white">
-                            {<br>
-                              &nbsp;&nbsp;&nbsp;&nbsp;<span class="green">breakpoints:</span>[<span class="orange">576, 768, 1201</span>]
-                            <br>&nbsp;&nbsp;}</span>);
-                                        <br />
-                                        &lt;/script&gt;
+                                        <span class="purple">let</span> texturaB <span class="green">=</span> <span class="white">textureLoader.</span>load(path + <span class="green">'face.jpg'</span>);<br/>
+                                   </code>
+                                </div>
+                                <p style="font-weight: lighter;">
+                                    Textura del rostro
+                                </p>
+                                <div class="text-editor">
+                                    <code>
+                                        <span class="purple">let</span> texturaC <span class="green">=</span> <span class="white">textureLoader.</span>load(path + <span class="green">'gold.jpg'</span>);<br/>
                                     </code>
                                 </div>
-
+                                <p style="font-weight: lighter;">
+                                    Textura de los bordes
+                                </p>
                             </div>
 
 
                         </div>
                     </section>
 
-                    <!-- Centering -->
-                    <section class="section" id="Centering">
+                    <!-- Sombras -->
+                    <section class="section" id="Sombras">
                         <div style="margin-top: 6rem">
 
                             <!-- sect1 -->
-                            <h2 class="heading">Centering</h2>
-                            <p style="font-weight: lighter;">
-                                After some fantastic work from <kbd><a style="color: orange;"
-                                                                       href="https://github.com/p-realinho">@p-realinho</a></kbd>, we
-                                just released the ability to center parallax elements in your viewport!
-                                We'll be building a nice demo website, but for now check out the tests
-                                folder for several examples of how it works via our tests folder on
-                                <a href="https://github.com/dixonandmoe/rellax">GitHub</a>.
-                            </p>
-                            <br>
+                            <h2 class="heading">Sombras</h2>
                             <p style="font-weight: lighter;">
                                 There's two ways to implement centering, either on specific elements or as a global option.
                             </p>
 
                             <div class="text-editor">
                                 <code>
-                                    &lt;div <span class="purple">class</span>="<span class="green">rellax</span>" <span class="purple">data-rellax-percentage</span>="<span class="green">0.5</span>"&gt;<br>
-                                    <span class="white">&nbsp;&nbsp;I’m that default chill speed of "-2" and "centered"</span><br>
-                                    &lt;/div&gt;
-                                    <br />
-                                    <br>
-                                    &lt;div <span class="purple">class</span>="<span class="green">rellax</span>" <span class="purple">data-rellax-speed</span>="<span class="green">7</span>"
-                                    <br>&nbsp;&nbsp;<span class="purple">data-rellax-percentage</span>="<span class="green">0.5</span>"&gt;<br>
-                                    <span class="white">&nbsp;&nbsp;I’m super fast!! And super centered!!</span><br>
-                                    &lt;/div&gt;
-                                    <br />
-                                    <br>
-                                    &lt;div <span class="purple">class</span>="<span class="green">rellax</span>" <span class="purple">data-rellax-speed</span>="<span class="green">-4</span>"
-                                    <br>&nbsp;&nbsp;<span class="purple">data-rellax-percentage</span>="<span class="green">0.5</span>"&gt;<br>
-                                    <span class="white">&nbsp;&nbsp;I’m extra slow and smooth, and hella centered.</span><br>
-                                    &lt;/div&gt;
-                                    <br />
+                                    renderer<span class="white">.shadowMap</span>.enabled <span class="green">=</span> <span class="purple">true</span>;<br/><br/>
                                 </code>
                             </div>
-
-                            <div>
-                                <!-- sect2 -->
-                                <div style="margin-top: 5rem;">
-                                    <div class="text-editor">
-                                        <code>
-                                            &lt;script&gt;
-                                            <br>&nbsp;&nbsp;<span class="comment">//default JS Setting</span>
-                                            <br>&nbsp;&nbsp;<span class="purple">var</span> rellax = <span class="green">new</span> <span class="white">Rellax</span>('.rellax',
-                                            <span class="white">
-                          {<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="green">center:</span><span class="orange">true</span>
-                        <br>&nbsp;&nbsp;}</span>);
-                                            <br />
-                                            &lt;/script&gt;
-                                        </code>
-                                    </div>
-                                </div>
+                            <p style="font-weight: lighter;">
+                                Activamos la generación de sombras en el <kbd>canvas</kbd>
+                            </p>
+                            <div class="text-editor">
+                                <code>
+                                    suelo<span class="white">.receiveShadow</span> <span class="green">=</span> <span class="purple">true</span>;<br/><br/>
+                                </code>
                             </div>
+                            <p style="font-weight: lighter;">
+                                Para el suelo solo activamos la posibilidad de recibir sombras con <kbd>receiveShadow</kbd>
+                            </p>
+                            <div class="text-editor">
+                                <code>
+                                    cuello<span class="white">.receiveShadow</span> <span class="green">=</span> <span class="purple">true</span>;<br/>
+                                    cuello<span class="white">.castShadow</span> <span class="green">=</span> <span class="purple">true</span>;<br/><br/>
+                                    menton<span class="white">.receiveShadow</span> <span class="green">=</span> <span class="purple">true</span>;<br/>
+                                    menton<span class="white">.castShadow</span> <span class="green">=</span> <span class="purple">true</span>;<br/><br/>
+                                    boca<span class="white">.receiveShadow</span> <span class="green">=</span> <span class="purple">true</span>;<br/>
+                                    boca<span class="white">.castShadow</span> <span class="green">=</span> <span class="purple">true</span>;<br/><br/>
+                                    cara<span class="white">.receiveShadow</span> <span class="green">=</span> <span class="purple">true</span>;<br/>
+                                    cara<span class="white">.castShadow</span> <span class="green">=</span> <span class="purple">true</span>;<br/><br/>
+                                    nasal<span class="white">.receiveShadow</span> <span class="green">=</span> <span class="purple">true</span>;<br/>
+                                    nasal<span class="white">.castShadow</span> <span class="green">=</span> <span class="purple">true</span>;<br/><br/>
+                                    frontal<span class="white">.receiveShadow</span> <span class="green">=</span> <span class="purple">true</span>;<br/>
+                                    frontal<span class="white">.castShadow</span> <span class="green">=</span> <span class="purple">true</span>;<br/><br/>
+                                    paretal<span class="white">.receiveShadow</span> <span class="green">=</span> <span class="purple">true</span>;<br/>
+                                    paretal<span class="white">.castShadow</span> <span class="green">=</span> <span class="purple">true</span>;<br/><br/>
+                                </code>
+                            </div>
+                            <p style="font-weight: lighter;">
+                                Para todos los demás objetos activamos la posibilidad de recibir
+                                y generar sombras con <kbd>receiveShadow</kbd> y <kbd>castShadow</kbd>
+                            </p>
                         </div>
                     </section>
 
                     <!-- Z-index -->
-                    <section class="section" id="ZIndex">
+                    <section class="section" id="Materiales">
                         <div style="margin-top: 6rem">
 
                             <!-- sect1 -->
-                            <h2 class="heading">Z-Index</h2>
+                            <h2 class="heading">Materiales</h2>
                             <p style="font-weight: lighter;">
-                                If you want to sort your elements properly in the Z space,
-                                you can use the <br><kbd>data-rellax-zindex</kbd> property.
+                                Se configuran los materiales que se van a aplicar a los diferentes objetos de la cabeza
+                                del robot teniendo en cuenta que se utiliza <kbd>MeshLambertMaterial</kbd> para objetos mate
+                                y <kbd>MeshPhongMaterial</kbd> para objetos brillantes. Estos dos tipos de materiales permiten sombras,
+                                por el contrario el tipo de material <kbd>MeshBasicMaterial</kbd> no permite sombras.
                             </p>
                             <br>
 
                             <div class="text-editor">
                                 <code>
-                                    &lt;div <span class="purple">class</span>="<span class="green">rellax</span>"&gt;<br>
-                                    <span class="white">&nbsp;&nbsp;I’m that default chill speed of "-2" and default &nbsp;&nbsp;z-index of 0</span><br>
-                                    &lt;/div&gt;
-                                    <br />
-                                    <br>
-                                    &lt;div <span class="purple">class</span>="<span class="green">rellax</span>" <span class="purple">data-rellax-speed</span>="<span class="green">7</span>"
-                                    <br>&nbsp;&nbsp;<span class="purple">data-rellax-zindex</span>="<span class="green">5</span>"&gt;<br>
-                                    <span class="white">&nbsp;&nbsp;I’m super fast!! And on top of the previous &nbsp;&nbsp;element, I'm z-index 5!!</span><br>
-                                    &lt;/div&gt;
-                                    <br />
+                                    <span class="purple">let</span> materialSuelo = <span class="green">new</span> <span class="white">THREE.MeshLambertMaterial</span>({<br/>
+                                    &nbsp;&nbsp;color: <span class="green">"white"</span>,<br/>
+                                    &nbsp;&nbsp;map: <span class="purple">texturaA</span><br/>
+                                    });
+                                </code>
+                            </div>
+                            <p style="font-weight: lighter;">
+                                Material del suelo
+                            </p>
+                            <div class="text-editor">
+                                <code>
+                                    <span class="purple">let</span> materialesPiel = <span class="green">new</span> <span class="white">THREE.MeshLambertMaterial</span>({<br/>
+                                    &nbsp;&nbsp;color: <span class="green">new</span> <span class="white">THREE.Color</span>(<span class="green">"rgb(169, 158, 154)"</span>),<br/>
+                                    &nbsp;&nbsp;map: <span class="purple">texturaB</span><br/>
+                                    });
+                                </code>
+                            </div>
+                            <p style="font-weight: lighter;">
+                                Material de la piel del robot
+                            </p>
+                            <div class="text-editor">
+                                <code>
+                                    <span class="purple">let</span> materialesRasgos = <span class="green">new</span> <span class="white">THREE.MeshPhongMaterial</span>({<br/>
+                                    &nbsp;&nbsp;color: <span class="green">new</span> <span class="white">THREE.Color</span>(<span class="green">"rgb(169, 158, 154)"</span>),<br/>
+                                    &nbsp;&nbsp;specular: <span class="green">new</span> <span class="white">THREE.Color</span>(<span class="green">"rgb(143, 134, 135)"</span>),<br/>
+                                    &nbsp;&nbsp;shininess: <span class="purple">50</span>,<br/>
+                                    &nbsp;&nbsp;wireframe: <span class="purple">false</span>,<br/>
+                                    &nbsp;&nbsp;map: <span class="purple">texturaC</span><br/>
+                                    });
+                                </code>
+                            </div>
+                            <p style="font-weight: lighter;">
+                                Material para los rasgos pronunciados de robot
+                            </p>
+                            <div class="text-editor">
+                                <code>
+                                    <span class="purple">let</span> materialesFlotante = <span class="green">new</span> <span class="white">THREE.MeshLambertMaterial</span>({<br/>
+                                    &nbsp;&nbsp;color: <span class="green">new</span> <span class="white">THREE.Color</span>(<span class="green">"rgb(0, 0, 0)"</span>),<br/>
+                                    &nbsp;&nbsp;wireframe: <span class="purple">false</span><br/>
+                                    });
+                                </code>
+                            </div>
+                            <p style="font-weight: lighter;">
+                                Material para los ojos y cejas
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Iluminación -->
+                    <section class="section" id="Iluminacion">
+                        <div style="margin-top: 6rem">
+                            <!-- sect1 -->
+                            <h2 class="heading">Iluminación</h2>
+                            <p style="font-weight: lighter;">
+                                Se aplica la iluminación al lienzo que estamos trabajando,
+                                para este caso especifico se aplica una luz ambiente con el objeto <kbd>AmbientLight</kbd>,
+                                una luz puntual con el objeto <kbd>PointLight</kbd>, una luz direccional con el objeto <kbd>DirectionalLight</kbd>
+                                y una luz focal con el objeto <kbd>SpotLight</kbd>. Después de implementar la iluminación
+                                vamos a poder ver las sombras de los objetos a los cuales les configuramos eta funcionalidad,
+                                de igual forma se pueden visualizar las texturas asignadas.
+                            </p>
+                            <br>
+                            <div class="text-editor">
+                                <code>
+                                    <span class="purple">let</span> luzAmbiente = <span class="green">new</span> <span class="white">THREE.AmbientLight</span>(<span class="green">0xFFFFFF</span>, <span class="purple">0.5</span>);<br/>
+                                    <span class="green">scene</span>.add(<span class="white">luzAmbiente</span>);
+                                </code>
+                            </div>
+                            <p style="font-weight: lighter;">
+                                Luz ambiente
+                            </p>
+                            <div class="text-editor">
+                                <code>
+                                    <span class="purple">let</span> luzPuntual = <span class="green">new</span> <span class="white">THREE.PointLight</span>(<span class="green">0xFFFFFF</span>, <span class="purple">0.7</span>);<br/>
+                                    luzPuntual<span class="white">.position</span>.set(<span class="purple">100, 200, 100</span>);<br/>
+                                    <span class="green">scene</span>.add(<span class="white">luzPuntual</span>);
+                                </code>
+                            </div>
+                            <p style="font-weight: lighter;">
+                                Luz puntual
+                            </p>
+                            <div class="text-editor">
+                                <code>
+                                    <span class="purple">let</span> luzDireccional = <span class="green">new</span> <span class="white">THREE.DirectionalLight</span>(<span class="green">0xFFFFFF</span>, <span class="purple">0.3</span>);<br/>
+                                    luzDireccional<span class="white">.position</span>.set(<span class="purple">0, 40, -100</span>);<br/>
+                                    <span class="green">scene</span>.add(<span class="white">luzDireccional</span>);
+                                </code>
+                            </div>
+                            <p style="font-weight: lighter;">
+                                Luz direccional
+                            </p>
+                            <div class="text-editor">
+                                <code>
+                                    <span class="purple">let</span> luzFocal = <span class="green">new</span> <span class="white">THREE.SpotLight</span>(<span class="green">0xFFFFFF</span>, <span class="purple">1</span>);<br/>
+                                    luzFocal<span class="white">.position</span>.set(<span class="purple">0, 173, -100</span>);<br/>
+                                    luzFocal<span class="white">.target</span>.position<span class="white">.set</span>(<span class="purple">0, 0, 0</span>);<br/>
+                                    luzFocal<span class="white">.angle</span> = <span class="purple">Math.PI</span> / <span class="white">10</span>;<br/>
+                                    luzFocal<span class="white">.penumbra</span> = <span class="purple">0.2</span>;<br/><br/>
+
+                                    luzFocal<span class="white">.shadow</span>.camera<span class="white">.near</span> = <span class="purple">100</span>;<br/>
+                                    luzFocal<span class="white">.shadow</span>.camera<span class="white">.far</span> = <span class="purple">1700</span>;<br/>
+                                    luzFocal<span class="white">.shadow</span>.camera<span class="white">.fov</span> = <span class="purple">7000</span>;<br/>
+                                    luzFocal<span class="white">.shadow</span>.mapSize<span class="white">.width</span> = <span class="purple">500</span>;<br/>
+                                    luzFocal<span class="white">.shadow</span>.mapSize<span class="white">.height</span> = <span class="purple">500</span>;
+                                </code>
+                            </div>
+                            <p style="font-weight: lighter;">
+                                Luz focal
+                            </p>
+                            <div class="text-editor">
+                                <code>
+                                    <span class="green">scene</span>.add(luzFocal<span class="white">.target</span>);<br/>
+                                    luzFocal<span class="white">.castShadow</span> = <span class="purple">true</span>;<br/>
+                                    <span class="green">scene</span>.add(<span class="white">luzFocal</span>);
+                                </code>
+                            </div>
+                            <p style="font-weight: lighter;">
+                                Se incorpora la luz focal
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Entorno -->
+                    <section class="section" id="Entorno">
+                        <div style="margin-top: 6rem">
+
+                            <!-- sect1 -->
+                            <h2 class="heading">Entorno</h2>
+                            <p style="font-weight: lighter;">
+                                Se implementa una textura de entorno para dar el efecto de que nuestro
+                                robot esta  en un espacio abierto. Este proceso es posible utilizando
+                                las herrameintas <kbd>ShaderLib.cube</kbd> y <kbd>ShaderMaterial</kbd> en un <kbd>BoxGeometry</kbd>.
+                            </p>
+                            <br>
+
+                            <div class="text-editor">
+                                <code>
+                                    <span class="purple">let</span> walls = [<span class="white">path</span> + <span class="green">'Yokohama/posx.jpg'</span>, <span class="white">path</span> + <span class="green">'Yokohama/negx.jpg'</span>,<br/>
+                                    &nbsp;&nbsp;<span class="white">path</span> + <span class="green">'Yokohama/posy.jpg'</span>, <span class="white">path</span> + <span class="green">'Yokohama/negy.jpg'</span>,<br/>
+                                    &nbsp;&nbsp;<span class="white">path</span> + <span class="green">'Yokohama/posz.jpg'</span>, <span class="white">path</span> + <span class="green">'Yokohama/negz.jpg'</span><br/>
+                                    ];<br/><br/>
+                                    texturesD = <span class="green">new</span> THREE<span class="white">.CubeTextureLoader()</span>.load(<span class="purple">walls</span>);
+                                </code>
+                            </div>
+                            <p style="font-weight: lighter;">
+                                Se crea textura para la vista panorámica o de habitación.
+                            </p>
+                            <div class="text-editor">
+                                <code>
+                                    <span class="purple">let</span> shader = THREE<span class="white">.ShaderLib</span>.cube;<br/>
+                                    shader<span class="white">.uniforms</span>.tCube<span class="white">.value</span> = <span class="purple">texturesD</span>;<br/>
+
+                                    <span class="purple">let</span> shaderMaterial = <span class="green">new</span> THREE<span class="white">.ShaderMaterial</span>({<br/>
+                                    &nbsp;&nbsp;fragmentShader: shader<span class="white">.fragmentShader</span>,<br/>
+                                    &nbsp;&nbsp;vertexShader: shader<span class="white">.vertexShader</span>,<br/>
+                                    &nbsp;&nbsp;uniforms: shader<span class="white">.uniforms</span>,<br/>
+                                    &nbsp;&nbsp;dephtWrite: <span class="purple">false</span>,<br/>
+                                    &nbsp;&nbsp;side: THREE<span class="white">.BackSide</span><br/>
+                                    });<br/><br/>
+
+                                    room = <span class="green">new</span> THREE<span class="white">.Mesh</span>(<span class="green">new</span> THREE<span class="white">.BoxGeometry</span>(<span class="purple">500</span>, <span class="purple">500</span>, <span class="purple">500</span>), <span class="purple">shaderMaterial</span>);<br/>
+                                    room<span class="white">.position</span>.y += <span class="purple">250</span>;<br/>
+                                    <span class="green">scene</span>.add(<span class="purple">room</span>);<br/>
                                 </code>
                             </div>
                         </div>
                     </section>
 
-                    <!-- Horizontal Parallax -->
-                    <section class="section" id="HorParlx">
+                    <!-- Vistas -->
+                    <section class="section" id="Vistas">
                         <div style="margin-top: 6rem">
                             <!-- sect1 -->
-                            <h2 class="heading">Horizontal Parallax</h2>
-                            <p style="font-weight: lighter;">
-                                Horizontal parallax is disabled by default. You can enable it by passing
-                                <br><kbd><span class="orange">horizontal: true</span></kbd> in the settings
-                                block. This feature is intended for panoramic style websites, where users
-                                scroll horizontally instead of vertically. Note that this can work together
-                                at the same time with the default vertical parallax. If you do not want this,
-                                pass <kbd><span class="orange">vertical: false</span></kbd>.
-                            </p>
-                            <br>
 
+                            <h2 class="heading">Vistas</h2>
+                            <p style="font-weight: lighter;">
+                                Se implementa una cámara ortogonal para visualizar nuestro
+                                objeto en diferentes planos, alzado, planta y perfil con el
+                                objeto <kbd>OrthographicCamera</kbd>.
+                            </p>
                             <div class="text-editor">
                                 <code>
-                                    &lt;script&gt;
-                                    <br>&nbsp;&nbsp;<span class="comment">//Enable Horizontal Parallax Scrolling</span>
-                                    <br>&nbsp;&nbsp;<span class="purple">var</span> rellax = <span class="green">new</span> <span class="white">Rellax</span>('.rellax',
-                                    <span class="white">
-                        {<br>
-                          &nbsp;&nbsp;&nbsp;&nbsp;<span class="green">horizontal:</span><span class="orange">true</span>
-                                        </br ><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Disable vertical Parallax Scrolling</span>
-                          &nbsp;&nbsp;&nbsp;&nbsp;<span class="green">vertical:</span><span class="orange">false</span>
-                        <br>&nbsp;&nbsp;}</span>);
-                                    <br />
-                                    &lt;/script&gt;
-                                </code>
-                            </div>
+                                    <span class="purple">let</span> l <span class="green">=</span> b <span class="green">=</span> -4;<br/>
+                                    <span class="purple">let</span> r <span class="green">=</span> t <span class="green">=</span> -l;<br/><br/>
 
-                        </div>
-                    </section>
+                                    <span class="purple">let</span> origen = <span class="green">new</span> THREE<span class="white">.Vector3</span>(<span class="purple">0,0,0</span>);<br/>
 
-                    <!-- Custom Wrapper -->
-                    <section class="section" id="CustomWrapper">
-                        <div style="margin-top: 6rem">
+                                    <span class="purple">let</span> camaraOrthographic;<br/>
+                                    if(<span class="green">ar</span> > <span class="purple">1</span>){<br/>
+                                    &nbsp;&nbsp;camaraOrthographic = <span class="green">new</span> THREE<span class="white">.OrthographicCamera</span>(<span class="green">l*ar</span>, <span class="green">r*ar</span>, <span class="green">t</span>, <span class="green">b</span>, <span class="purple">-500</span>, <span class="purple">500</span>);<br/>
+                                    }<br/>
+                                    else{<br/>
+                                    &nbsp;&nbsp;camaraOrthographic = <span class="green">new</span> THREE<span class="white">.OrthographicCamera</span>(<span class="green">l</span>, <span class="green">r</span>, <span class="green">t/ar</span>, <span class="green">b/ar</span>, <span class="purple">-500</span>, <span class="purple">500</span>);<br/>
+                                    }<br/><br/>
 
-                            <!-- sect1 -->
-                            <h2 class="heading">Custom Wrapper</h2>
-                            <p style="font-weight: lighter;">
-                                By default, the position of parallax elements is determined via the scroll
-                                position of the body. Passing in the <kbd><span class="orange">wrapper</span></kbd>
-                                property in the settings block will tell Rellax to watch that element instead.
-                            </p>
-                            <br>
+                                    alzado <span class="green">=</span> camaraOrthographic<span class="white">.clone()</span>;<br/>
+                                    alzado.position<span class="white">.set</span>(<span class="purple">0,0,100</span>);<br/>
+                                    alzado<span class="white">.lookAt</span>(<span class="purple">origen</span>);<br/><br/>
+                                    perfil <span class="green">=</span> camaraOrthographic<span class="white">.clone()</span>;<br/>
+                                    perfil.position<span class="white">.set</span>(<span class="purple">100,0,0</span>);<br/>
+                                    perfil<span class="white">.lookAt</span>(<span class="purple">origen</span>);<br/><br/>
+                                    planta <span class="green">=</span> camaraOrthographic<span class="white">.clone()</span>;<br/>
+                                    planta.position<span class="white">.set</span>(<span class="purple">0,100,0</span>);<br/>
+                                    planta<span class="white">.lookAt</span>(<span class="purple">origen</span>);<br/><br/>
 
-                            <div class="text-editor">
-                                <code>
-                                    &lt;script&gt;
-                                    <br>&nbsp;&nbsp;<span class="comment">//Set wrapper to .custom-element instead of the body</span>
-                                    <br>&nbsp;&nbsp;<span class="purple">var</span> rellax = <span class="green">new</span> <span class="white">Rellax</span>('.rellax',
-                                    <span class="white">
-                        {<br>
-                          &nbsp;&nbsp;&nbsp;&nbsp;<span class="green">wrapper:</span><span class="orange">'.custom-element'</span>
-                        <br>&nbsp;&nbsp;}</span>);
-                                    <br />
-                                    &lt;/script&gt;
+                                    <span class="green">scene</span>.add(<span class="purple">alzado</span>);<br/>
+                                    <span class="green">scene</span>.add(<span class="purple">perfil</span>);<br/>
+                                    <span class="green">scene</span>.add(<span class="purple">planta</span>);<br/>
                                 </code>
                             </div>
                         </div>
                     </section>
 
-                    <!-- Target Node -->
-                    <section class="section" id="TargetNode">
+                    <!-- Controles -->
+                    <section class="section" id="Controles">
                         <div style="margin-top: 6rem">
                             <!-- sect1 -->
 
-                            <h2 class="heading">Target Node</h2>
+                            <h2 class="heading">Controles</h2>
                             <p style="font-weight: lighter;">
-                                Instead of using a className you can use a node, handy when using
-                                React and you want to use <kbd><span class="orange">refs</span></kbd>
-                                instead of <kbd><span class="orange">className</span></kbd>
+                                Se da la posibilidad de que el usuario interactué con el
+                                robot a través de la implementación e controles de
+                                movimiento con la librería <kbd>dat.GUI()</kbd>.
                             </p>
-                            <br>
-
-                            <div class="text-editor">
-                                <code>
-                                    &lt;div <span class="purple">ref</span> = {<span class="purple">ref => </span>{ this<span class="green">.rellaxRef </span> = <span class="purple">ref</span>}}&gt;<br>
-                                    <span class="white">&nbsp;&nbsp;I’m that default chill speed of "-2"</span><br>
-                                    &lt;/div&gt;
-                                </code>
-                                <br />
-                            </div>
-
                             <div style="margin-top: 5rem;">
                                 <div class="text-editor">
                                     <code>
-                                        &lt;script&gt;
-                                        <br>&nbsp;&nbsp;<span class="purple">var</span> rellax = <span class="green">new</span> <span class="white">Rellax</span>(this<span class="orange">.rellaxRef</span>);
-                                        <br>
-                                        &lt;/script&gt;
+                                        <span class="purple">let</span> effectController = {<br/>
+                                        &nbsp;&nbsp;giroCabeza: <span class="purple">0</span>,<br/>
+                                        &nbsp;&nbsp;saludaRobot: <span class="purple">0</span>,<br/>
+                                        &nbsp;&nbsp;reiniciar: <span class="white">function ()</span> {<br/>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;angulo = <span class="purple">0</span><br/>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;location<span class="white">.reload()</span>;<br/>
+                                        &nbsp;&nbsp;},<br/>
+                                        &nbsp;&nbsp;color: <span class="green">new</span> THREE<span class="white">.Color</span>(<span class="green">"rgb(54, 54, 53)"</span>)<br/>
+                                        }<br/><br/>
+                                        <span class="purple">let</span> gui = <span class="green">new</span> dat<span class="white">.GUI()</span>;<br/>
+                                        <span class="purple">let</span> sub = gui<span class="white">.addFolder</span>(<span class="green">"Controles Robot"</span>);<br/><br/>
+                                        sub.add(<span class="white">effectController</span>, <span class="green">"giroCabeza"</span>, <span class="purple">-180</span>, <span class="purple">180</span>, <span class="purple">1</span>).name(<span class="green">"Giro cabeza"</span>);<br/>
+                                        sub.add(<span class="white">effectController</span>, <span class="green">"saludaRobot"</span>, <span class="purple">-45</span>, <span class="purple">45</span>, <span class="purple">1</span>).name(<span class="green">"Saludo"</span>);<br/>
+                                        sub.add(<span class="white">effectController</span>, <span class="green">"reiniciar"</span>);<br/>
                                     </code>
                                 </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Refresh -->
-                    <section class="section" id="Refresh">
-                        <div style="margin-top: 6rem">
-                            <!-- sect1 -->
-
-                            <h2 class="heading">Refresh</h2>
-
-                            <div class="text-editor">
-                                <code>
-                                    &lt;script&gt;
-                                    <br>&nbsp;&nbsp;<span class="comment">// Start Rellax</span>
-                                    <br>&nbsp;&nbsp;<span class="purple">var</span> rellax = <span class="green">new</span> <span class="white">Rellax</span>('.rellax');
-                                    <br />
-                                    <br>&nbsp;&nbsp;<span class="comment">// Destroy and create again parallax with previous settings</span>
-                                    <br>&nbsp;&nbsp;rellax<span class="orange">.refresh();</span>
-                                    <br>
-                                    &lt;/script&gt;
-                                </code>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Destroy -->
-                    <section class="section" id="Destroy">
-                        <div style="margin-top: 6rem">
-                            <!-- sect1 -->
-                            <h2 class="heading">Destroy</h2>
-                            <div class="text-editor">
-                                <code>
-                                    &lt;script&gt;
-                                    <br>&nbsp;&nbsp;<span class="comment">// Start Rellax</span>
-                                    <br>&nbsp;&nbsp;<span class="purple">var</span> rellax = <span class="green">new</span> <span class="white">Rellax</span>('.rellax');
-                                    <br />
-                                    <br>&nbsp;&nbsp;<span class="comment">// End Rellax and reset parallax elements to their original positions</span>
-                                    <br>&nbsp;&nbsp;rellax<span class="orange">.refresh();</span>
-                                    <br>
-                                    &lt;/script&gt;
-                                </code>
                             </div>
                         </div>
                     </section>
@@ -581,17 +718,16 @@
                     <div class="options" id="optnCard">
 
                         <p class="options-text disabled">Progreso!</p>
-                        <a href="#GettingStarted" class="option options-title active">Empezando!</a>
-                        <a class="option options-title" href="#Speed">Speed</a>
-                        <a class="option options-title" href="#Centering">Centering</a>
-                        <a class="option options-title" href="#ZIndex">Z-Index</a>
-                        <a class="option options-title" href="#HorParlx">Horizontal Scrolling</a>
+                        <a class="option options-title active" href="#GettingStarted">Empezando!</a>
+                        <a class="option options-title" href="#Objetos">Objetos</a>
+                        <a class="option options-title" href="#Texturas">Texturas</a>
+                        <a class="option options-title" href="#Sombras">Sombras</a>
+                        <a class="option options-title" href="#Materiales">Materiales</a>
+                        <a class="option options-title" href="#Iluminacion">Iluminación</a>
                         <!-- <span>➔</span> -->
-                        <a class="option options-title" href="#CustomWrapper">Custom Wrapper</a>
-                        <a class="option options-title" href="#TargetNode">Target Node</a>
-                        <p class="options-text options-text--margin">Methods</p>
-                        <a class="option options-title" href="#Refresh">Refresh</a>
-                        <a class="option options-title" href="#Destroy">Destroy</a>
+                        <a class="option options-title" href="#Entorno">Entorno</a>
+                        <a class="option options-title" href="#Vistas">Vistas</a>
+                        <a class="option options-title" href="#Controles">Controles</a>
 
                     </div>
                 </div>
@@ -602,15 +738,8 @@
     <section class="share">
         <div class="container">
             <div class="row">
-                <div class="col-md-offset-1 col-md-3">
-                    <a class="dam" href="http://dixonandmoe.com/">Dixon &amp; Moe</a>
-                </div>
-                <div class="col-md-offset-3 col-md-2">
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=http://dixonandmoe.com/rellax/">Share
-                        <span>➔</span></a>
-                </div>
-                <div class="col-md-offset-0 col-md-2">
-                    <a href="https://twitter.com/share?url=http://dixonandmoe.com/rellax/">Tweet <span>➔</span></a>
+                <div class="col-md-offset-1 col-md-7">
+                    <a class="dam" href="#">Gráficos por Computador</a>
                 </div>
             </div>
         </div>
