@@ -17,7 +17,7 @@ let path = "images/";
 let ladosCara = altos = [];
 let l = b = -4;
 let r = t = -l;
-let cabeza, cuello, menton, boca, cara, nasal, frontal, paretal;
+let room, cabeza, cuello, menton, boca, cara, nasal, frontal, paretal;
 // Materiales y Texturas
 let materiales = [], textures = [];
 let controles = [];
@@ -68,6 +68,8 @@ let rellax = new Rellax('.rellax', {
         }
         if (position.y <= controles[6][0] && !controles[6][1]) {
             cabeza.add(paretal);
+            rebuildMaterials();
+            updateObjectsMaterials();
             controles[6][1] = true;
         }
     },
@@ -93,6 +95,7 @@ function init() {
 function loadScene() {
     // Cargar la escena con objetos
     buildHead();
+    generateTextures();
     generateMaterials();
     // Geometrias
     const geocuello = new THREE.CylinderGeometry(10, 10, altosCara[0], ladosCara[0]);
@@ -190,6 +193,23 @@ function setCameras(ar){
     scene.add(camera);
 }
 
+function generateTextures() {
+    // Materiales
+    let textureLoader = new THREE.TextureLoader()
+    textures[0] = textureLoader.load(path + 'wood.jpg');
+    textures[0].magFilter = THREE.LinearFilter;
+    textures[0].minFilter = THREE.LinearFilter;
+    textures[0].repeat.set(4, 3);
+    textures[0].wrapS = textures[0].wrapT = THREE.MirroredRepeatWrapping;
+    textures[1] = textureLoader.load(path + 'oxidado.jpg');
+    let walls = [path + 'Yokohama/posx.jpg', path + 'Yokohama/negx.jpg',
+        path + 'Yokohama/posy.jpg', path + 'Yokohama/negy.jpg',
+        path + 'Yokohama/posz.jpg', path + 'Yokohama/negz.jpg'
+    ];
+    textures[2] = new THREE.CubeTextureLoader().load(walls);
+    textures[3] = textureLoader.load(path + 'gold.jpg');
+}
+
 function generateMaterials() {
     // Materiales
     materiales[0] = new THREE.MeshBasicMaterial({
@@ -228,6 +248,69 @@ function generateMaterials() {
         color: new THREE.Color("rgb(255, 255, 255)"),
         wireframe:true
     });
+}
+
+function rebuildMaterials() {
+    // Materiales
+    materiales[0] = new THREE.MeshLambertMaterial({
+        color: new THREE.Color("rgb(220, 172, 74)"),
+        map: textures[1]
+    });
+    materiales[1] = new THREE.MeshPhongMaterial({
+        color: new THREE.Color("rgb(122, 49, 19)"),
+        specular: new THREE.Color("rgb(214, 175,58)"),
+        shininess: 50,
+        wireframe: false,
+        map: textures[1]
+    });
+    materiales[2] = new THREE.MeshLambertMaterial({
+        color: new THREE.Color("rgb(220, 172, 74)"),
+        map: textures[3]
+    });
+    materiales[3] = new THREE.MeshPhongMaterial({
+        color: new THREE.Color("rgb(122, 49, 19)"),
+        specular: new THREE.Color("rgb(214, 175,58)"),
+        shininess: 50,
+        wireframe: false,
+        map: textures[1]
+    });
+    materiales[4] = new THREE.MeshLambertMaterial({
+        color: new THREE.Color("rgb(220, 172, 74)"),
+        map: textures[3]
+    });
+    materiales[5] = new THREE.MeshPhongMaterial({
+        color: new THREE.Color("rgb(122, 49, 19)"),
+        specular: new THREE.Color("rgb(214, 175,58)"),
+        shininess: 50,
+        wireframe: false,
+        map: textures[1]
+    });
+    materiales[6] = new THREE.MeshPhongMaterial({
+        color: new THREE.Color("rgb(122, 49, 19)"),
+        specular: new THREE.Color("rgb(214, 175,58)"),
+        shininess: 50,
+        wireframe: false,
+        map: textures[1]
+    });
+    materiales[7] = new THREE.MeshBasicMaterial({
+        color: new THREE.Color("rgb(255, 255, 0)"),
+        wireframe:true
+    });
+    materiales[8] = new THREE.MeshBasicMaterial({
+        color: new THREE.Color("rgb(255, 255, 255)"),
+        wireframe:true
+    });
+}
+
+function updateObjectsMaterials() {
+    let indice = 0;
+    cuello.material = materiales[indice++];
+    menton.material = materiales[indice++];
+    boca.material = materiales[indice++];
+    cara.material = materiales[indice++];
+    nasal.material = materiales[indice++];
+    frontal.material = materiales[indice++];
+    paretal.material = materiales[indice++];
 }
 
 function buildHead() {
