@@ -20,15 +20,17 @@ let r = t = -l;
 let suelo, room, cabeza, cuello, menton, boca, cara, nasal, frontal, paretal;
 // Materiales y Texturas
 let materialSuelo = [], materiales = [], textures = [];
-let objetos = [], acciones = [];
+let inicio, objetos = [], acciones = [];
 
 // Acciones
 init();
 loadScene();
 render();
 
-let inicia = -227, resta = 66;
-objetos[0] = [scene, suelo, inicia, false];
+let inicia = -205, resta = 282;
+inicio = [inicia, false];
+objetos[0] = [scene, suelo, inicia -= resta, false];
+resta = 66;
 objetos[1] = [cabeza, cuello, inicia -= resta, false];
 resta = 54;
 objetos[2] = [cabeza, menton, inicia -= resta, false];
@@ -37,9 +39,14 @@ objetos[4] = [cabeza, cara, inicia -= resta, false];
 objetos[5] = [cabeza, nasal, inicia -= resta, false];
 objetos[6] = [cabeza, frontal, inicia -= resta, false];
 objetos[7] = [cabeza, paretal, inicia -= resta, false];
-for (let i = 0; i < objetos.length; i++) {
-    acciones[0] = [i, inicia -= resta, false];
-}
+resta = 143;
+acciones[0] = [inicia -= resta, false];
+resta = 205;
+acciones[1] = [inicia -= resta, false];
+resta = 334;
+acciones[2] = [inicia -= resta, false];
+resta = 334;
+acciones[3] = [inicia -= resta, false];
 
 console.log(objetos);
 console.log(acciones);
@@ -48,6 +55,10 @@ let rellax = new Rellax('.rellax', {
     callback: function (position) {
         // callback every position change
         console.log(position);
+        if (position.y <= inicio[0] && !inicio[1]) {
+            scene.add( new THREE.AxisHelper(100));
+            inicio[1] = true;
+        }
         for (let i = 0; i < objetos.length; i++) {
             if (position.y <= objetos[i][2] && !objetos[i][3]) {
                 console.log(position);
@@ -56,27 +67,30 @@ let rellax = new Rellax('.rellax', {
             }
         }
         for (let i = 0; i < acciones.length; i++) {
-            if (position.y <= acciones[i][1] && !acciones[i][2]) {
+            if (position.y <= acciones[i][0] && !acciones[i][1]) {
                 switch (i) {
                     case 0:
                         console.log(position);
-                        rebuildMaterials(acciones[i][0]);
-                        acciones[i][2] = true;
+                        blackMaterials();
+                        updateObjectsMaterials();
+                        acciones[i][1] = true;
                         break;
                     case 1:
                         console.log(position);
-                        updateObjectsMaterials(acciones[i][0]);
-                        acciones[i][2] = true;
+                        renderer.setClearColor(new THREE.Color("rgb(54,54,53)"));
+                        addShadows();
+                        acciones[i][1] = true;
                         break;
                     case 2:
                         console.log(position);
-                        addShadows(acciones[i][0]);
-                        acciones[i][2] = true;
+                        rebuildMaterials();
+                        updateObjectsMaterials();
+                        acciones[i][1] = true;
                         break;
                     case 3:
-                        generateLights(acciones[i][0]);
+                        generateLights();
                         console.log(position);
-                        acciones[i][2] = true;
+                        acciones[i][1] = true;
                         break;
                     default:
                         break;
@@ -91,7 +105,7 @@ let rellax = new Rellax('.rellax', {
 function init() {
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(ancho, alto);
-    renderer.setClearColor(new THREE.Color(0x363635));
+    renderer.setClearColor(new THREE.Color("rgb(167,167,167)"));
     renderer.shadowMap.enabled = true;
     document.getElementById('avance').appendChild(renderer.domElement);
 
@@ -164,7 +178,6 @@ function loadScene() {
 
     // Construir la escena
     scene.add(cabeza);
-    scene.add( new THREE.AxisHelper(100));
 }
 
 function update() {
@@ -309,6 +322,20 @@ function generateMaterials() {
         color: new THREE.Color("rgb(255, 255, 0)"),
         wireframe:true
     });
+}
+
+function blackMaterials() {
+    // Materiales
+    materialSuelo[0] = new THREE.MeshBasicMaterial({
+        color: new THREE.Color("rgb(0,0,0)"),
+        wireframe:true
+    });
+    for (let i = 0; i < materiales.length; i++) {
+        materiales[i] = new THREE.MeshBasicMaterial({
+            color: new THREE.Color("rgb(0, 0, 0)"),
+            wireframe:true
+        });
+    }
 }
 
 function rebuildMaterials() {
