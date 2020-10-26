@@ -11,7 +11,7 @@
 let renderer, scene, camera;
 let cameraController;
 let alzado, planta, perfil;
-let angulo = 0, ancho = 650, alto = 650;
+let ancho = 650, alto = 650;
 // Variables globales
 let path = "images/";
 let ladosCara = altos = [];
@@ -189,8 +189,6 @@ function loadScene() {
 
 function update() {
     cameraController.update();
-    angulo += Math.PI/1000;
-    //cabeza.rotation.y = angulo;
 }
 
 function render() {
@@ -220,8 +218,8 @@ function setCameras(ar){
     planta.position.set(0,100,0);
     planta.lookAt(origen);
 
-    let cameraPerspective = new THREE.PerspectiveCamera(150, ar, 0.1, 1000);
-    cameraPerspective.position.set(30, 30, 30);
+    let cameraPerspective = new THREE.PerspectiveCamera(40, ar, 0.1, 1000);
+    cameraPerspective.position.set(300, 100, 300);
     cameraPerspective.lookAt(origen);
 
     camera = cameraPerspective.clone();
@@ -274,17 +272,17 @@ function addRoom() {
     });
 
     room = new THREE.Mesh(new THREE.BoxGeometry(500, 500, 500), shaderMaterial);
-    room.position.y += 250;
+    room.position.y += 150;
     scene.add(room);
 }
 
 function generateTextures() {
     // Materiales
     let textureLoader = new THREE.TextureLoader();
-    textures[0] = textureLoader.load(path + 'pisometal.jpg');
+    textures[0] = textureLoader.load(path + 'floor.jpg');
     textures[0].magFilter = THREE.LinearFilter;
     textures[0].minFilter = THREE.LinearFilter;
-    textures[0].repeat.set(4, 3);
+    textures[0].repeat.set(3, 2);
     textures[0].wrapS = textures[0].wrapT = THREE.MirroredRepeatWrapping;
     textures[1] = textureLoader.load(path + 'face.jpg');
     textures[2] = textureLoader.load(path + 'newgold.jpg');
