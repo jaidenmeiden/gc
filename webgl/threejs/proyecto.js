@@ -47,6 +47,8 @@ resta = 334;
 acciones[2] = [inicia -= resta, false];
 resta = 334;
 acciones[3] = [inicia -= resta, false];
+resta = 355;
+acciones[4] = [inicia -= resta, false];
 
 console.log(objetos);
 console.log(acciones);
@@ -89,6 +91,11 @@ let rellax = new Rellax('.rellax', {
                         break;
                     case 3:
                         generateLights();
+                        console.log(position);
+                        acciones[i][1] = true;
+                        break;
+                    case 4:
+                        addRoom();
                         console.log(position);
                         acciones[i][1] = true;
                         break;
@@ -256,7 +263,7 @@ function generateLights() {
 
 function addRoom() {
     let shader = THREE.ShaderLib.cube;
-    shader.uniforms.tCube.value = textures[2];
+    shader.uniforms.tCube.value = textures[3];
 
     let shaderMaterial = new THREE.ShaderMaterial({
         fragmentShader: shader.fragmentShader,
