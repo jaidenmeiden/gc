@@ -15,9 +15,9 @@ let ancho = 650, alto = 650;
 // Variables globales
 let path = "images/";
 let ladosCara = altos = [];
-let l = b = -4;
+let l = b = -70;
 let r = t = -l;
-let suelo, room, cabeza, cuello, menton, boca, cara, nasal, frontal, paretal;
+let suelo, room, cabeza, cuello, menton, boca, cara, nasal, frontal, paretal, ojos = [], cejas = [], labios;
 // Materiales y Texturas
 let materialSuelo = [], materiales = [], textures = [];
 let inicio, objetos = [], acciones = [];
@@ -39,6 +39,10 @@ objetos[4] = [cabeza, cara, inicia -= resta, false];
 objetos[5] = [cabeza, nasal, inicia -= resta, false];
 objetos[6] = [cabeza, frontal, inicia -= resta, false];
 objetos[7] = [cabeza, paretal, inicia -= resta, false];
+objetos[8] = [cabeza, null, inicia -= resta, false];
+resta = 77;
+objetos[9] = [cabeza, null, inicia -= resta, false];
+objetos[10] = [cabeza, labios, inicia -= resta, false];
 resta = 143;
 acciones[0] = [inicia -= resta, false];
 resta = 205;
@@ -64,8 +68,28 @@ let rellax = new Rellax('.rellax', {
         for (let i = 0; i < objetos.length; i++) {
             if (position.y <= objetos[i][2] && !objetos[i][3]) {
                 console.log(position);
-                objetos[i][0].add(objetos[i][1]);
-                objetos[i][3] = true;
+                if (i < 8) {
+                    objetos[i][0].add(objetos[i][1]);
+                    objetos[i][3] = true;
+                } else {
+                    if (i === 8) {
+                        objetos[i][0].add(ojos[0]);
+                        objetos[i][0].add(ojos[1]);
+                        objetos[i][3] = true;
+                    } else {
+                        if (i === 9) {
+                            objetos[i][0].add(cejas[0]);
+                            objetos[i][0].add(cejas[1]);
+                            objetos[i][3] = true;
+                        } else {
+                            if (i === 10) {
+                                objetos[i][0].add(objetos[i][1]);
+                                objetos[i][3] = true;
+                                objetos[i][3] = true;
+                            }
+                        }
+                    }
+                }
             }
         }
         for (let i = 0; i < acciones.length; i++) {
@@ -141,6 +165,9 @@ function loadScene() {
     const geonasal = new THREE.CylinderGeometry(25, 25, altosCara[4], ladosCara[1]);
     const geofrontal = new THREE.CylinderGeometry(20, 24, altosCara[5], ladosCara[2]);
     const geoparetal = new THREE.CylinderGeometry(5, 20, altosCara[6], ladosCara[2]);
+    const geopojos = new THREE.SphereGeometry(10, 32, 32);
+    const geocejas = new THREE.BoxGeometry(10, 4, 4);
+    const geolabios = new THREE.BoxGeometry(17, 2, 2);
 
     suelo = new THREE.Mesh(geosuelo, materialSuelo[0]);
     suelo.position.set(0,0,0);
@@ -183,6 +210,25 @@ function loadScene() {
     paretal = new THREE.Mesh(geoparetal, materiales[indice]);
     paretal.position.set(0,sube,0);
 
+    indice++;
+    ojos[0] = new THREE.Mesh(geopojos, materiales[indice]);
+    ojos[0].position.set(10,sube - 10, 25);
+
+    ojos[1] = new THREE.Mesh(geopojos, materiales[indice]);
+    ojos[1].position.set(25,sube - 10, 10);
+
+    cejas[0] = new THREE.Mesh(geocejas, materiales[indice]);
+    cejas[0].rotation.y = Math.PI/4;
+    cejas[0].position.set(10,sube + 5, 25);
+
+    cejas[1] = new THREE.Mesh(geocejas, materiales[indice]);
+    cejas[1].rotation.y = Math.PI/4;
+    cejas[1].position.set(25,sube + 5, 10);
+
+    labios = new THREE.Mesh(geolabios, materiales[indice]);
+    labios.rotation.y = Math.PI/4;
+    labios.position.set(20,sube - 23, 20);
+
     // Construir la escena
     scene.add(cabeza);
 }
@@ -202,20 +248,20 @@ function setCameras(ar){
 
     let camaraOrthographic;
     if(ar > 1){
-        camaraOrthographic = new THREE.OrthographicCamera(l*ar, r*ar, t, b, -500, 500);
+        camaraOrthographic = new THREE.OrthographicCamera(l*ar, r*ar, t, b, -1000, 1000);
     }
     else{
-        camaraOrthographic = new THREE.OrthographicCamera(l, r, t/ar, b/ar, -500, 500);
+        camaraOrthographic = new THREE.OrthographicCamera(l, r, t/ar, b/ar, -1000, 1000);
     }
 
     alzado = camaraOrthographic.clone();
-    alzado.position.set(0,0,100);
+    alzado.position.set(0,0,500);
     alzado.lookAt(origen);
     perfil = camaraOrthographic.clone();
-    perfil.position.set(100,0,0);
+    perfil.position.set(500,0,0);
     perfil.lookAt(origen);
     planta = camaraOrthographic.clone();
-    planta.position.set(0,100,0);
+    planta.position.set(0,500,0);
     planta.lookAt(origen);
 
     let cameraPerspective = new THREE.PerspectiveCamera(40, ar, 0.1, 1000);
@@ -224,9 +270,9 @@ function setCameras(ar){
 
     camera = cameraPerspective.clone();
 
-    //scene.add(alzado);
-    //scene.add(perfil);
-    //scene.add(planta);
+    scene.add(alzado);
+    scene.add(perfil);
+    scene.add(planta);
     scene.add(camera);
 }
 
@@ -327,6 +373,10 @@ function generateMaterials() {
         color: new THREE.Color("rgb(255, 255, 0)"),
         wireframe:true
     });
+    materiales[7] = new THREE.MeshBasicMaterial({
+        color: new THREE.Color("rgb(255, 255, 255)"),
+        wireframe:true
+    });
 }
 
 function blackMaterials() {
@@ -389,6 +439,10 @@ function rebuildMaterials() {
         wireframe: false,
         map: textures[1]
     });
+    materiales[7] = new THREE.MeshLambertMaterial({
+        color: new THREE.Color("rgb(112, 7, 7)"),
+        wireframe:false
+    });
 }
 
 function updateObjectsMaterials() {
@@ -401,6 +455,11 @@ function updateObjectsMaterials() {
     nasal.material = materiales[indice++];
     frontal.material = materiales[indice++];
     paretal.material = materiales[indice++];
+    ojos[0].material = materiales[indice];
+    ojos[1].material = materiales[indice];
+    cejas[0].material = materiales[indice];
+    cejas[1].material = materiales[indice];
+    labios.material = materiales[indice];
 }
 
 function addShadows() {
@@ -419,6 +478,16 @@ function addShadows() {
     frontal.castShadow = true;
     paretal.receiveShadow = true;
     paretal.castShadow = true;
+    ojos[0].receiveShadow = true;
+    ojos[0].castShadow = true;
+    ojos[1].receiveShadow = true;
+    ojos[1].castShadow = true;
+    cejas[0].receiveShadow = true;
+    cejas[0].castShadow = true;
+    cejas[1].receiveShadow = true;
+    cejas[1].castShadow = true;
+    labios.receiveShadow = true;
+    labios.castShadow = true;
 }
 
 function buildHead() {

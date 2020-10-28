@@ -344,6 +344,54 @@
                                     Sección paretal del robot.
                                 </p>
                             </div>
+                            <div>
+                                <!-- sect1 -->
+                                <div class="text-editor">
+                                    <code>
+                                        <span class="purple">const</span> geopojos = <span class="green">new</span> <span class="white">THREE.SphereGeometry</span>(<span class="purple">10, 32, 32</span>);<br/>
+                                        <span class="purple">let</span> ojos[0] = <span class="green">new</span> <span class="white">THREE.Mesh</span>(geopojos, <span class="white">"Material configurado"</span>);<br/>
+                                        <span class="purple">let</span> ojos[1] = <span class="green">new</span> <span class="white">THREE.Mesh</span>(geopojos, <span class="white">"Material configurado"</span>);<br/>
+                                        <span class="white">ojos[0].position.set</span>(25,<span class="white">"posición en eje Y"</span>,25);<br/>
+                                        <span class="white">ojos[1].position.set</span>(25,<span class="white">"posición en eje Y"</span>,10);<br/>
+                                        <span class="white">cabeza.add</span>(ojos[0]);<br/>
+                                        <span class="white">cabeza.add</span>(ojos[1]);
+                                    </code>
+                                </div>
+                                <p style="font-weight: lighter;">
+                                    Ojos del robot.
+                                </p>
+                            </div>
+                            <div>
+                                <!-- sect1 -->
+                                <div class="text-editor">
+                                    <code>
+                                        <span class="purple">const</span> geocejas = <span class="green">new</span> <span class="white">THREE.BoxGeometry</span>(<span class="purple">10, 4, 4</span>);<br/>
+                                        <span class="purple">let</span> cejas[0] = <span class="green">new</span> <span class="white">THREE.Mesh</span>(geocejas, <span class="white">"Material configurado"</span>);<br/>
+                                        <span class="purple">let</span> cejas[1] = <span class="green">new</span> <span class="white">THREE.Mesh</span>(geocejas, <span class="white">"Material configurado"</span>);<br/>
+                                        <span class="white">cejas[0].position.set</span>(25,<span class="white">"posición en eje Y"</span>,25);<br/>
+                                        <span class="white">cejas[1].position.set</span>(25,<span class="white">"posición en eje Y"</span>,10);<br/>
+                                        <span class="white">cabeza.add</span>(cejas[0]);<br/>
+                                        <span class="white">cabeza.add</span>(cejas[1]);
+                                    </code>
+                                </div>
+                                <p style="font-weight: lighter;">
+                                    Cejas del robot.
+                                </p>
+                            </div>
+                            <div>
+                                <!-- sect1 -->
+                                <div class="text-editor">
+                                    <code>
+                                        <span class="purple">const</span> geolabios = <span class="green">new</span> <span class="white">THREE.BoxGeometry</span>(<span class="purple">17, 2, 2</span>);<br/>
+                                        <span class="purple">let</span> labios = <span class="green">new</span> <span class="white">THREE.Mesh</span>(geolabios, <span class="white">"Material configurado"</span>);<br/>
+                                        <span class="white">labios.position.set</span>(20,<span class="white">"posición en eje Y"</span>,20);<br/>
+                                        <span class="white">cabeza.add</span>(labios);
+                                    </code>
+                                </div>
+                                <p style="font-weight: lighter;">
+                                    Labios del robot.
+                                </p>
+                            </div>
                         </div>
                     </section>
 
@@ -634,6 +682,40 @@
                         </div>
                     </section>
 
+                    <!-- Controles -->
+                    <section class="section" id="Controles">
+                        <div style="margin-top: 6rem">
+                            <!-- sect1 -->
+
+                            <h2 class="heading">Controles</h2>
+                            <p style="font-weight: lighter;">
+                                Se da la posibilidad de que el usuario interactué con el
+                                robot a través de la implementación e controles de
+                                movimiento con la librería <kbd>dat.GUI()</kbd>.
+                            </p>
+                            <div style="margin-top: 5rem;">
+                                <div class="text-editor">
+                                    <code>
+                                        <span class="purple">let</span> effectController = {<br/>
+                                        &nbsp;&nbsp;giroCabeza: <span class="purple">0</span>,<br/>
+                                        &nbsp;&nbsp;saludaRobot: <span class="purple">0</span>,<br/>
+                                        &nbsp;&nbsp;reiniciar: <span class="white">function ()</span> {<br/>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;angulo = <span class="purple">0</span><br/>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;location<span class="white">.reload()</span>;<br/>
+                                        &nbsp;&nbsp;},<br/>
+                                        &nbsp;&nbsp;color: <span class="green">new</span> THREE<span class="white">.Color</span>(<span class="green">"rgb(54, 54, 53)"</span>)<br/>
+                                        }<br/><br/>
+                                        <span class="purple">let</span> gui = <span class="green">new</span> dat<span class="white">.GUI()</span>;<br/>
+                                        <span class="purple">let</span> sub = gui<span class="white">.addFolder</span>(<span class="green">"Controles Robot"</span>);<br/><br/>
+                                        sub.add(<span class="white">effectController</span>, <span class="green">"giroCabeza"</span>, <span class="purple">-180</span>, <span class="purple">180</span>, <span class="purple">1</span>).name(<span class="green">"Giro cabeza"</span>);<br/>
+                                        sub.add(<span class="white">effectController</span>, <span class="green">"saludaRobot"</span>, <span class="purple">-45</span>, <span class="purple">45</span>, <span class="purple">1</span>).name(<span class="green">"Saludo"</span>);<br/>
+                                        sub.add(<span class="white">effectController</span>, <span class="green">"reiniciar"</span>);<br/>
+                                    </code>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
                     <!-- Vistas -->
                     <section class="section" id="Vistas">
                         <div style="margin-top: 6rem">
@@ -678,40 +760,6 @@
                         </div>
                     </section>
 
-                    <!-- Controles -->
-                    <section class="section" id="Controles">
-                        <div style="margin-top: 6rem">
-                            <!-- sect1 -->
-
-                            <h2 class="heading">Controles</h2>
-                            <p style="font-weight: lighter;">
-                                Se da la posibilidad de que el usuario interactué con el
-                                robot a través de la implementación e controles de
-                                movimiento con la librería <kbd>dat.GUI()</kbd>.
-                            </p>
-                            <div style="margin-top: 5rem;">
-                                <div class="text-editor">
-                                    <code>
-                                        <span class="purple">let</span> effectController = {<br/>
-                                        &nbsp;&nbsp;giroCabeza: <span class="purple">0</span>,<br/>
-                                        &nbsp;&nbsp;saludaRobot: <span class="purple">0</span>,<br/>
-                                        &nbsp;&nbsp;reiniciar: <span class="white">function ()</span> {<br/>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;angulo = <span class="purple">0</span><br/>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;location<span class="white">.reload()</span>;<br/>
-                                        &nbsp;&nbsp;},<br/>
-                                        &nbsp;&nbsp;color: <span class="green">new</span> THREE<span class="white">.Color</span>(<span class="green">"rgb(54, 54, 53)"</span>)<br/>
-                                        }<br/><br/>
-                                        <span class="purple">let</span> gui = <span class="green">new</span> dat<span class="white">.GUI()</span>;<br/>
-                                        <span class="purple">let</span> sub = gui<span class="white">.addFolder</span>(<span class="green">"Controles Robot"</span>);<br/><br/>
-                                        sub.add(<span class="white">effectController</span>, <span class="green">"giroCabeza"</span>, <span class="purple">-180</span>, <span class="purple">180</span>, <span class="purple">1</span>).name(<span class="green">"Giro cabeza"</span>);<br/>
-                                        sub.add(<span class="white">effectController</span>, <span class="green">"saludaRobot"</span>, <span class="purple">-45</span>, <span class="purple">45</span>, <span class="purple">1</span>).name(<span class="green">"Saludo"</span>);<br/>
-                                        sub.add(<span class="white">effectController</span>, <span class="green">"reiniciar"</span>);<br/>
-                                    </code>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
                 </div>
 
                 <div class="col-md-2 sticky">
@@ -726,8 +774,8 @@
                         <a class="option options-title" href="#Iluminacion">Iluminación</a>
                         <!-- <span>➔</span> -->
                         <a class="option options-title" href="#Entorno">Entorno</a>
-                        <a class="option options-title" href="#Vistas">Vistas</a>
                         <a class="option options-title" href="#Controles">Controles</a>
+                        <a class="option options-title" href="#Vistas">Vistas</a>
 
                     </div>
                 </div>
