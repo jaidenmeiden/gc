@@ -11,6 +11,8 @@
 let renderer, scene, camera;
 let cameraController;
 let alzado, planta, perfil;
+// Global GUI
+let effectController;
 let ancho = 650, alto = 650;
 // Variables globales
 let path = "images/";
@@ -21,6 +23,8 @@ let suelo, room, cabeza, cuello, menton, boca, cara, nasal, frontal, paretal, oj
 // Materiales y Texturas
 let materialSuelo = [], materiales = [], textures = [];
 let inicio, objetos = [], acciones = [];
+//Validación
+let control = false, posy = [];
 
 // Acciones
 init();
@@ -53,6 +57,7 @@ resta = 334;
 acciones[3] = [inicia -= resta, false];
 resta = 355;
 acciones[4] = [inicia -= resta, false];
+acciones[5] = [-2773, false];
 
 console.log(objetos);
 console.log(acciones);
@@ -60,7 +65,7 @@ let rellax = new Rellax('.rellax', {
     // center: true
     callback: function (position) {
         // callback every position change
-        console.log(position);
+        //console.log(position);
         if (position.y <= inicio[0] && !inicio[1]) {
             scene.add( new THREE.AxisHelper(100));
             inicio[1] = true;
@@ -120,6 +125,12 @@ let rellax = new Rellax('.rellax', {
                         break;
                     case 4:
                         addRoom();
+                        console.log(position);
+                        acciones[i][1] = true;
+                        break;
+                    case 5:
+                        setupGUI();
+                        control = true;
                         console.log(position);
                         acciones[i][1] = true;
                         break;
@@ -224,10 +235,12 @@ function loadScene() {
     cejas[1] = new THREE.Mesh(geocejas, materiales[indice]);
     cejas[1].rotation.y = Math.PI/4;
     cejas[1].position.set(25,sube + 5, 10);
+    posy[0] = sube + 5;
 
     labios = new THREE.Mesh(geolabios, materiales[indice]);
     labios.rotation.y = Math.PI/4;
     labios.position.set(20,sube - 23, 20);
+    posy[1] = sube - 23;
 
     // Construir la escena
     scene.add(cabeza);
@@ -235,6 +248,47 @@ function loadScene() {
 
 function update() {
     cameraController.update();
+
+    if (control) {
+        cabeza.rotation.y = effectController.giroCabeza * Math.PI / 180;
+        ojos[0].position.x = 10 - effectController.ojos;
+        ojos[0].position.z = 25 - effectController.ojos;
+        ojos[1].position.x = 25 + effectController.ojos;
+        ojos[1].position.z = 10 + effectController.ojos;
+        cejas[1].position.y = posy[0] + effectController.cejas;
+        cejas[0].position.y = posy[0] - effectController.cejas;
+        cabeza.rotation.x = effectController.rostro * Math.PI / 90;
+        cabeza.rotation.z = effectController.rostro * Math.PI / 90;
+        labios.position.y = posy[1] - effectController.boca;
+    }
+}
+
+function setupGUI() {
+
+    //Interfaz de usuario
+    effectController = {
+        giroCabeza: 0,
+        ojos: 0,
+        cejas: 0,
+        rostro: 0,
+        boca: 0,
+        reiniciar: function () {
+            angulo = 0
+            location.reload();
+        },
+        color: new THREE.Color("rgb(183, 177, 165)")
+    }
+    let gui = new dat.GUI({ autoPlace: false });
+    let sub = gui.addFolder("Controles Robot")
+    sub.add(effectController, "giroCabeza", -180, 180, 1).name("Buscando");
+    sub.add(effectController, "ojos", -4, 4, 1).name("Wow");
+    sub.add(effectController, "cejas", -4, 4, 1).name("Sorpresa");
+    sub.add(effectController, "rostro", -5, 5, 1).name("Saluda");
+    sub.add(effectController, "boca", 0, 3, 1).name("Hola");
+    sub.add(effectController, "reiniciar");
+
+    let customContainer = document.getElementById('my-gui-container');
+    customContainer.appendChild(gui.domElement);
 }
 
 function render() {
